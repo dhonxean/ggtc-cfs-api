@@ -17,7 +17,22 @@ class User extends Authenticatable
     public $modelName = 'user';
     public $table     = 'users';
 
-    protected $guarded = ['create_at'];
+    protected $guarded = ['created_at'];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'first_name',
+        'middle_name',
+        'last_name',
+        'email',
+        'password',
+        'username',
+        'status',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.

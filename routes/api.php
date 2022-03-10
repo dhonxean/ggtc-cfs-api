@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\{
+    AdminController,
+    CountryController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +19,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'v1'], function () {
+    
+    Route::controller(AdminController::class)->group(function () {
+        Route::post('/login', 'login');
+        Route::post('/create-admin', 'createAdmin');
+    });
+    // ADMIN ROUTES 
+    Route::middleware('auth.admin')->group( function () {
+        Route::controller(CountryController::class)->group(function () {
+            Route::post('/import-countries', 'massImport');
+        });
+    });
+
 });
