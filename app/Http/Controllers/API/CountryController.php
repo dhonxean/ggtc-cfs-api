@@ -28,8 +28,8 @@ class CountryController extends Controller
 		}
 	}
 
-	public function test(Request $r) {
-		return $r->input('token');
+	public function createCountry(Request $r) {
+		return 'yel';
 	}
 
 }

@@ -24,10 +24,17 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/login', 'login');
         Route::post('/create-admin', 'createAdmin');
     });
-    // ADMIN ROUTES 
-    Route::middleware('auth.admin')->group( function () {
-        Route::controller(CountryController::class)->group(function () {
-            Route::post('/import-countries', 'massImport');
+    // Admin routes
+    Route::group(['prefix' => 'admin'], function () {
+
+        // countries routes
+        Route::group(['prefix' => 'country'], function () {
+            Route::controller(CountryController::class)->group(function () {
+                Route::middleware('auth.admin')->group( function () {
+                    Route::post('/import-countries', 'massImport');
+                    Route::post('/create', 'createCountry');
+                });
+            });
         });
     });
 
