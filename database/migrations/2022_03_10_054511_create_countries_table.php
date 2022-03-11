@@ -14,6 +14,7 @@ class CreateCountriesTable extends Migration
     public function up()
     {
         Schema::create('countries', function (Blueprint $table) {
+            $table->id('id');
             $table->string('name');
             $table->string('iso2');
             $table->string('iso3')->nullable();
@@ -23,8 +24,6 @@ class CreateCountriesTable extends Migration
             $table->enum('publish',[1,0])->default(0);
             $table->softDeletes();
             $table->timestamps();
-            
-            $table->primary('iso2');
         });
     }
 

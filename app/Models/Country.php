@@ -16,4 +16,8 @@ class Country extends Model
     protected $primaryKey = 'iso2';
 
     protected $guarded = ['created_at'];
+
+    public function country_details () {
+        return $this->hasMany(CountryDetail::class);
+    }
 }
