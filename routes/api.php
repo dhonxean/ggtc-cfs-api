@@ -20,13 +20,15 @@ use App\Http\Controllers\API\{
 
 Route::group(['prefix' => 'v1'], function () {
     
-    Route::controller(AdminController::class)->group(function () {
-        Route::post('/login', 'login');
-        Route::post('/create-admin', 'createAdmin');
-    });
     // Admin routes
     Route::group(['prefix' => 'admin'], function () {
-
+        Route::controller(AdminController::class)->group(function () {
+            Route::post('/login', 'login');
+            Route::post('/logout', 'logout');
+            Route::post('/create', 'create');
+            Route::get('/info', 'info');
+            Route::post('/update/{id}', 'update');
+        });
         // countries routes
         Route::group(['prefix' => 'country'], function () {
             Route::controller(CountryController::class)->group(function () {
