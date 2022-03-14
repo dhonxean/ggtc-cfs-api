@@ -17,6 +17,7 @@ class CreateImagesTable extends Migration
             $table->id();
             $table->integer('parent_id')->unsigned()->nullable();
             $table->string('model')->nullable();
+            $table->string('category')->nullable();
             $table->string('title')->nullable();
             $table->string('alt')->nullable();
             $table->string('path');
@@ -24,7 +25,6 @@ class CreateImagesTable extends Migration
             $table->string('file_name')->nullable();
             $table->enum('file_mode',['dark','light'])->nullable();
             $table->integer('sequence')->nullable();
-            $table->string('category')->nullable();
             $table->tinyInteger('from_import')->default(0);
             $table->longText('caption')->nullable();
             $table->timestamps();

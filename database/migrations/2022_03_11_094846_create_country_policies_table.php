@@ -17,6 +17,7 @@ class CreateCountryPoliciesTable extends Migration
             $table->id();
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
             $table->foreignId('policy_id')->constrained('policy_recommendations')->onDelete('cascade');
+            $table->integer('sequence')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

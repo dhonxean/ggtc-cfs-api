@@ -13,6 +13,11 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
+
+	/**
+	 ** ###[ CMS APIs ]###########################
+	**
+	**/
 	public function login(Request $r) {
 		$validator = \Validator::make($r->all(), [
 			'email'    => 'required',
@@ -50,7 +55,7 @@ class AdminController extends Controller
 			]);
 		}
 	}
-
+	
 	public function logout(Request $r) {
 		if ($r->user()) {
             $token = $r->user()->token();
@@ -98,7 +103,7 @@ class AdminController extends Controller
 			]);
 	
 			return response([
-				'user' => $user
+				'res' => $user
 			]);
 		}
 		else {
@@ -158,7 +163,7 @@ class AdminController extends Controller
 			$user->load('role');
 
 			return response([
-				'user' => $user
+				'res' => $user
 			]);
 		}
 		else {

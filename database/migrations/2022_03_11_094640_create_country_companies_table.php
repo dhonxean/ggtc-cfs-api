@@ -17,6 +17,7 @@ class CreateCountryCompaniesTable extends Migration
             $table->id();
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
+            $table->integer('sequence')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCountryLogosTable extends Migration
+class CreateCountryMetadataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateCountryLogosTable extends Migration
      */
     public function up()
     {
-        Schema::create('country_logos', function (Blueprint $table) {
+        Schema::create('country_metadata', function (Blueprint $table) {
             $table->id();
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
-            $table->foreignId('logo_id')->constrained('logos')->onDelete('cascade');
-            $table->integer('sequence')->nullable();
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +29,6 @@ class CreateCountryLogosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('country_logos');
+        Schema::dropIfExists('country_metadata');
     }
 }

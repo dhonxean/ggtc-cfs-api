@@ -11,7 +11,11 @@ use App\Models\Country;
 
 class CountryController extends Controller
 {
-	//
+	
+	/**
+	 ** ###[ CMS APIs ]###########################
+	**
+	**/
 	public function massImport(Request $r) {
 		foreach ($r->request as $key => $value) {
 			$country = Country::where('iso2', $value['iso2'])->first();
@@ -28,7 +32,7 @@ class CountryController extends Controller
 		}
 	}
 
-	public function createCountry(Request $r) {
+	public function create(Request $r) {
 		return 'yel';
 	}
 

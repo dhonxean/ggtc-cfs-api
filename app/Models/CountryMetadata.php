@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\ModelTraits;
 
-class Logo extends Model
+class CountryMetadata extends Model
 {
-    use HasFactory, SoftDeletes, ModelTraits;
+    use HasFactory;
 
-    public $modelName = 'logo';
-    public $table     = 'logos';
+    public $modelName = 'country_metadata';
+    public $table     = 'country_metadata';
 
     protected $guarded = ['created_at'];
 }
