@@ -6,8 +6,6 @@ use App\Http\Controllers\API\{
     AdminController,
     CountryController,
     CompanyController,
-    PolicyRecommendationController,
-    LogoController,
 };
 
 /*
@@ -38,6 +36,10 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::middleware('auth.admin')->group( function () {
                     Route::post('/import-countries', 'massImport');
                     Route::post('/create', 'create');
+                    Route::get('/info/{id}', 'info');
+                    Route::post('/update/{id}', 'update');
+                    Route::delete('/delete/{id}', 'delete');
+                    Route::post('/get-country', 'getAllCountry');
                 });
             });
         });
@@ -51,29 +53,6 @@ Route::group(['prefix' => 'v1'], function () {
                     Route::post('/update/{id}', 'update');
                     Route::delete('/delete/{id}', 'delete');
                     Route::post('/get-all-company', 'getAllCompany');
-                });
-            });
-        });
-
-        // policy recommendation routes
-        Route::group(['prefix' => 'policy-reco'], function () {
-            Route::controller(PolicyRecommendationController::class)->group(function () {
-                Route::middleware('auth.admin')->group( function () {
-                    Route::post('/create', 'create');
-                    Route::get('/info/{id}', 'info');
-                    Route::post('/update/{id}', 'update');
-                    Route::delete('/delete/{id}', 'delete');
-                    Route::post('/get-all-policy-recommendation', 'getAllPolicy');
-                });
-            });
-        });
-
-        // logo routes
-        Route::group(['prefix' => 'logo'], function () {
-            Route::controller(LogoController::class)->group(function () {
-                Route::middleware('auth.admin')->group( function () {
-                    Route::post('/create', 'create');
-                    Route::get('/info/{id}', 'info');
                 });
             });
         });

@@ -14,4 +14,8 @@ class CountryCompany extends Model
     public $table     = 'country_companies';
 
     protected $guarded = ['created_at'];
+
+    public function company() {
+        return $this->belongsTo(Company::class);
+    }
 }

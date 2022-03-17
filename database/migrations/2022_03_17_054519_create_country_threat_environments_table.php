@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLogosTable extends Migration
+class CreateCountryThreatEnvironmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateLogosTable extends Migration
      */
     public function up()
     {
-        Schema::create('logos', function (Blueprint $table) {
+        Schema::create('country_threat_environments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
             $table->text('content');
+            $table->string('sequence')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +30,6 @@ class CreateLogosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logos');
+        Schema::dropIfExists('country_threat_environments');
     }
 }

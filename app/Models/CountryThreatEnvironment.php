@@ -7,14 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ModelTraits;
 
-class PolicyRecommendation extends Model
+class CountryThreatEnvironment extends Model
 {
     use HasFactory, SoftDeletes, ModelTraits;
 
-    public $modelName = 'policy_recommendation';
-    public $table     = 'policy_recommendations';
+    public $modelName = 'country_threat_environment';
+    public $table     = 'country_threat_environments';
 
     protected $guarded = ['created_at'];
-
-    
 }

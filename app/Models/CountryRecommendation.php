@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\ModelTraits;
 
-class CountryPolicy extends Model
+class CountryRecommendation extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ModelTraits;
 
-    public $modelName = 'country_policy';
-    public $table     = 'country_policies';
+    public $modelName = 'country_recommendation';
+    public $table     = 'country_recommendations';
 
     protected $guarded = ['created_at'];
 }

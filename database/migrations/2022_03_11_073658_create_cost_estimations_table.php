@@ -19,6 +19,7 @@ class CreateCostEstimationsTable extends Migration
             $table->bigInteger('low')->nullable();
             $table->bigInteger('average')->nullable();
             $table->bigInteger('high')->nullable();
+            $table->bigInteger('consumption')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

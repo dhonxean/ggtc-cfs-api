@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePolicyRecommendationsTable extends Migration
+class CreateCountryRecommendationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreatePolicyRecommendationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('policy_recommendations', function (Blueprint $table) {
+        Schema::create('country_recommendations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
             $table->text('content');
+            $table->string('sequence')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +30,6 @@ class CreatePolicyRecommendationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('policy_recommendations');
+        Schema::dropIfExists('country_recommendations');
     }
 }

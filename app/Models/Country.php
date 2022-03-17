@@ -20,4 +20,45 @@ class Country extends Model
     public function country_details () {
         return $this->hasMany(CountryDetail::class);
     }
+
+    public function companies() {
+        return $this->hasMany(CountryCompany::class, 'country_id', 'id')
+                    ->select('id', 'country_id', 'company_id', 'sequence')
+                    ->with(['company' => function ($q) {
+                        $q->select('id', 'name');
+                    }])
+                    ->orderBy('sequence');
+    }
+
+    public function threats() {
+        return $this->hasMany(CountryThreatEnvironment::class, 'country_id', 'id');
+    }
+
+    public function recommendations() {
+        return $this->hasMany(CountryRecommendation::class, 'country_id', 'id');
+    }
+
+    public function references() {
+        return $this->hasMany(CountryReference::class, 'country_id', 'id');
+    }
+
+    public function country_detail() {
+        return $this->hasOne(CountryDetail::class, 'country_id', 'id');
+    }
+    
+    public function cost_estimation() {
+        return $this->hasOne(CostEstimation::class, 'country_id', 'id');
+    }
+
+    public function meta_data() {
+        return $this->hasOne(CountryMetadata::class, 'country_id', 'id');
+    }
+
+    public function marine_waste() {
+        return $this->hasOne(MarineWaste::class, 'country_id', 'id');
+    }
+
+    public function urban_waste() {
+        return $this->hasOne(UrbanWaste::class, 'country_id', 'id');
+    }
 }
