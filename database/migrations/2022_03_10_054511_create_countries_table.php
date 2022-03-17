@@ -21,7 +21,7 @@ class CreateCountriesTable extends Migration
             $table->binary('flag');
             $table->string('currency')->nullable();
             $table->string('region')->nullable();
-            $table->enum('publish',[1,0])->default(0);
+            $table->integer('publish')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

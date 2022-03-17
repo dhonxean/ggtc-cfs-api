@@ -115,7 +115,9 @@ class AdminController extends Controller
 
 	public function info(Request $r) {
 		if ($r->user()) {
-			return $r->user();
+			return response([
+				'user' => $r->user()
+			]);
 		}
 		else {
 			return response([

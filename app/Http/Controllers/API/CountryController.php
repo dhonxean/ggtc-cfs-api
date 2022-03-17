@@ -39,6 +39,7 @@ class CountryController extends Controller
 					'flag' => $value['emoji'],
 					'currency' => $value['currency'],
 					'region' => $value['region'],
+					'publish' => 0,
 				]);
 			}
 		}
