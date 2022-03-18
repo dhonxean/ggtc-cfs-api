@@ -57,9 +57,8 @@ class CountryController extends Controller
 			// country details
 			'economic_losses' 			=> 'required',
 			'cigarettes_consumed' 		=> 'required',
-			'threat_to_environment' 	=> 'required',
+			'gti_facts' 				=> 'required',
 			'policy' 					=> 'required',
-			'recommendations' 			=> 'required',
 			'acknowledgement' 			=> 'required',
 			// cost estimations
 			'low_estimate' 				=> 'required',
@@ -78,12 +77,6 @@ class CountryController extends Controller
 			'urban_cost_2' 	    		=> 'required',
 			'urban_cost_year_2' 		=> 'required',
 			'urban_cost_total' 			=> 'required',
-			// threat environment
-			'threat'					=> 'required|array',
-			'threat_sequence'			=> 'required|array',
-			// recommendations
-			'recommendation'			=> 'required|array',
-			'recommendation_sequence'	=> 'required|array',
 			// references
 			'reference'					=> 'required|array',
 			'reference_sequence'		=> 'required|array',
@@ -123,9 +116,8 @@ class CountryController extends Controller
 			'country_id' 			=> $country->id,
 			'economic_losses'		=> $r->economic_losses,
 			'cigarettes_consumed'	=> $r->cigarettes_consumed,
-			'threat_to_environment'	=> $r->threat_to_environment,
 			'policy'				=> $r->policy,
-			'recommendations'		=> $r->recommendations,
+			'gti_facts'				=> $r->gti_facts,
 			'acknowledgement'		=> $r->acknowledgement,
 		]);
 
@@ -155,28 +147,6 @@ class CountryController extends Controller
 			'cost_of_collection'	=> $r->urban_cost_total,
 		]);
 
-		if (!empty($r->threat)) {
-			$country->threats()->delete();
-			foreach ($r->threat as $key => $item) {
-				CountryThreatEnvironment::create([
-					'country_id' 	=> $country->id,
-					'content'	=> $item,
-					'sequence'		=> isset($r->threat_sequence[$key]) ? $r->threat_sequence[$key] : 0,
-				]);
-			}
-		}
-
-		if (!empty($r->recommendation)) {
-			$country->recommendations()->delete();
-			foreach ($r->recommendation as $key => $item) {
-				CountryRecommendation::create([
-					'country_id' 	=> $country->id,
-					'content'	=> $item,
-					'sequence'		=> isset($r->recommendation_sequence[$key]) ? $r->recommendation_sequence[$key] : 0,
-				]);
-			}
-		}
-
 		if (!empty($r->reference)) {
 			$country->references()->delete();
 			foreach ($r->reference as $key => $item) {
@@ -199,7 +169,7 @@ class CountryController extends Controller
 			}
 		}
 
-		$country->load('country_detail', 'cost_estimation', 'marine_waste','urban_waste','threats', 'recommendations', 'references', 'companies', 'meta_data');
+		$country->load('country_detail', 'cost_estimation', 'marine_waste','urban_waste', 'references', 'companies', 'meta_data');
 		
 		return response([
 			'res' => $country
@@ -213,8 +183,8 @@ class CountryController extends Controller
 					'cost_estimation', 
 					'marine_waste', 
 					'urban_waste', 
-					'threats', 
-					'recommendations', 
+					// 'threats', 
+					// 'recommendations', 
 					'references', 
 					'companies', 
 					'meta_data'
@@ -248,9 +218,8 @@ class CountryController extends Controller
 			// country details
 			'economic_losses' 			=> 'required',
 			'cigarettes_consumed' 		=> 'required',
-			'threat_to_environment' 	=> 'required',
 			'policy' 					=> 'required',
-			'recommendations' 			=> 'required',
+			'gti_facts' 				=> 'required',
 			'acknowledgement' 			=> 'required',
 			// cost estimations
 			'low_estimate' 				=> 'required',
@@ -269,12 +238,6 @@ class CountryController extends Controller
 			'urban_cost_2' 	    		=> 'required',
 			'urban_cost_year_2' 		=> 'required',
 			'urban_cost_total' 			=> 'required',
-			// threat environment
-			'threat'					=> 'required|array',
-			'threat_sequence'			=> 'required|array',
-			// recommendations
-			'recommendation'			=> 'required|array',
-			'recommendation_sequence'	=> 'required|array',
 			// references
 			'reference'					=> 'required|array',
 			'reference_sequence'		=> 'required|array',
@@ -313,9 +276,8 @@ class CountryController extends Controller
 			$country->country_detail->update([
 				'economic_losses'		=> $r->economic_losses,
 				'cigarettes_consumed'	=> $r->cigarettes_consumed,
-				'threat_to_environment'	=> $r->threat_to_environment,
 				'policy'				=> $r->policy,
-				'recommendations'		=> $r->recommendations,
+				'gti_facts'				=> $r->gti_facts,
 				'acknowledgement'		=> $r->acknowledgement,
 			]);
 
@@ -341,28 +303,6 @@ class CountryController extends Controller
 				'cost_year_2'			=> $r->urban_cost_year_2,
 				'cost_of_collection'	=> $r->urban_cost_total,
 			]);
-
-			if (!empty($r->threat)) {
-				$country->threats()->delete();
-				foreach ($r->threat as $key => $item) {
-					CountryThreatEnvironment::create([
-						'country_id' 	=> $country->id,
-						'content'	=> $item,
-						'sequence'		=> isset($r->threat_sequence[$key]) ? $r->threat_sequence[$key] : 0,
-					]);
-				}
-			}
-	
-			if (!empty($r->recommendation)) {
-				$country->recommendations()->delete();
-				foreach ($r->recommendation as $key => $item) {
-					CountryRecommendation::create([
-						'country_id' 	=> $country->id,
-						'content'	=> $item,
-						'sequence'		=> isset($r->recommendation_sequence[$key]) ? $r->recommendation_sequence[$key] : 0,
-					]);
-				}
-			}
 	
 			if (!empty($r->reference)) {
 				$country->references()->delete();
@@ -386,7 +326,7 @@ class CountryController extends Controller
 				}
 			}
 
-			$country->load('country_detail', 'cost_estimation', 'marine_waste','urban_waste','threats', 'recommendations', 'references', 'companies', 'meta_data');
+			$country->load('country_detail', 'cost_estimation', 'marine_waste','urban_waste', 'references', 'companies', 'meta_data');
 		
 			return response([
 				'res' => $country

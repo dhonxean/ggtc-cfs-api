@@ -19,10 +19,11 @@ class CreateCountryDetailsTable extends Migration
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
             $table->string('cigarettes_consumed');
             $table->string('economic_losses');
+            $table->text('gti_facts')->nullable();
             $table->text('policy')->nullable();
-            $table->text('recommendations')->nullable();
+            // $table->text('recommendations')->nullable();
             $table->text('acknowledgement')->nullable();
-            $table->text('threat_to_environment')->nullable();
+            // $table->text('threat_to_environment')->nullable();
             $table->softDeletes();
             $table->timestamps();
             

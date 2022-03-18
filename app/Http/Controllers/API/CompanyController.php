@@ -120,7 +120,11 @@ class CompanyController extends Controller
 						$query->orderBy($r->sort_by);
 					}
 				})
-				->paginate(20);
+				->when( $r->filled('all') , function ($q, $r) {
+					return $q->get();
+				}, function ($q) {
+					return $q->paginate(50);
+				});
 
 
 		return response([

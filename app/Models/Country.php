@@ -30,14 +30,6 @@ class Country extends Model
                     ->orderBy('sequence');
     }
 
-    public function threats() {
-        return $this->hasMany(CountryThreatEnvironment::class, 'country_id', 'id');
-    }
-
-    public function recommendations() {
-        return $this->hasMany(CountryRecommendation::class, 'country_id', 'id');
-    }
-
     public function references() {
         return $this->hasMany(CountryReference::class, 'country_id', 'id');
     }
