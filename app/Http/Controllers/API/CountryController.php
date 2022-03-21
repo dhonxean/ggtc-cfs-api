@@ -56,7 +56,7 @@ class CountryController extends Controller
 			'publish'  	  				=> 'required',
 			// country details
 			'economic_losses' 			=> 'required',
-			'cigarettes_consumed' 		=> 'required',
+			'death' 					=> 'required',
 			'gti_facts' 				=> 'required',
 			'policy' 					=> 'required',
 			'acknowledgement' 			=> 'required',
@@ -64,7 +64,7 @@ class CountryController extends Controller
 			'low_estimate' 				=> 'required',
 			'average_estimate' 	    	=> 'required',
 			'high_estimate' 	    	=> 'required',
-			'consumption' 	    		=> 'required',
+			'consumption' 	    		=> 'sometimes',
 			// marine waste
 			'marine_cost_1' 	    	=> 'required',
 			'marine_cost_year_1' 		=> 'required',
@@ -100,7 +100,7 @@ class CountryController extends Controller
 			'iso3'		=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
 			'flag'		=> $r->flag,
 			'currency'	=> $r->currency,
-			'region'	=> isset($r->region) ? ($r->region != null ? $r->region : NULL) : NULL,
+			'region'	=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : NULL) : NULL,
 			'publish'	=> $r->publish,
 		]);
 		
@@ -115,7 +115,7 @@ class CountryController extends Controller
 		CountryDetail::create([
 			'country_id' 			=> $country->id,
 			'economic_losses'		=> $r->economic_losses,
-			'cigarettes_consumed'	=> $r->cigarettes_consumed,
+			'death'					=> 	$r->death,
 			'policy'				=> $r->policy,
 			'gti_facts'				=> $r->gti_facts,
 			'acknowledgement'		=> $r->acknowledgement,
@@ -217,7 +217,7 @@ class CountryController extends Controller
 			'publish'  	  				=> 'required',
 			// country details
 			'economic_losses' 			=> 'required',
-			'cigarettes_consumed' 		=> 'required',
+			'death' 					=> 'required',
 			'policy' 					=> 'required',
 			'gti_facts' 				=> 'required',
 			'acknowledgement' 			=> 'required',
@@ -264,7 +264,7 @@ class CountryController extends Controller
 				'iso3'		=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
 				'flag'		=> $r->flag,
 				'currency'	=> $r->currency,
-				'region'	=> isset($r->region) ? ($r->region != null ? $r->region : NULL) : NULL,
+				'region'	=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : NULL) : NULL,
 				'publish'	=> $r->publish,
 			]);
 
@@ -275,7 +275,7 @@ class CountryController extends Controller
 
 			$country->country_detail->update([
 				'economic_losses'		=> $r->economic_losses,
-				'cigarettes_consumed'	=> $r->cigarettes_consumed,
+				'death'					=> $r->death,
 				'policy'				=> $r->policy,
 				'gti_facts'				=> $r->gti_facts,
 				'acknowledgement'		=> $r->acknowledgement,

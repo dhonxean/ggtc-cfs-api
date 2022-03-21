@@ -17,7 +17,6 @@ class CreateCountryDetailsTable extends Migration
         Schema::create('country_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
-            $table->string('cigarettes_consumed')->nullable();
             $table->string('economic_losses')->nullable();
             $table->string('death')->nullable();
             $table->text('gti_facts')->nullable();
