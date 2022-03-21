@@ -123,7 +123,7 @@ class CompanyController extends Controller
 				->when( $r->filled('all') , function ($q, $r) {
 					return $q->get();
 				}, function ($q) {
-					return $q->paginate(50);
+					return $q->paginate(20);
 				});
 
 

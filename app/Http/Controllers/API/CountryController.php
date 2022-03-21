@@ -368,8 +368,36 @@ class CountryController extends Controller
 						$query->orderBy($r->sort_by);
 					}
 				})
-				->paginate(20);
+				->when( $r->filled('all') , function ($q, $r) {
+					return $q->get();
+				}, function ($q) {
+					return $q->paginate(20);
+				});
 
+
+		return response([
+			'res' => $country
+		]);
+	}
+	
+	/**
+	 ** ###[ WEB APIs ]###########################
+	 **
+	 **/
+	public function allCountry(Request $r) {
+		$country = Country::when(isset($r->keyword), function ($query) use ($r) {
+					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%');	
+				})
+				->when(isset($r->sort_by), function ($query) use ($r) {
+					if ($r->order_type == 'desc') {
+						$query->orderByDesc($r->sort_by);
+					}
+					else {
+						$query->orderBy($r->sort_by);
+					}
+				})
+				->where('publish', 1)
+				->get();
 
 		return response([
 			'res' => $country
