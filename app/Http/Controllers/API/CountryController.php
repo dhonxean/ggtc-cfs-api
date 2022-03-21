@@ -100,7 +100,7 @@ class CountryController extends Controller
 			'iso3'		=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
 			'flag'		=> $r->flag,
 			'currency'	=> $r->currency,
-			'region'	=> isset($r->region) ? $r->region : NULL,
+			'region'	=> isset($r->region) ? ($r->region != null ? $r->region : NULL) : NULL,
 			'publish'	=> $r->publish,
 		]);
 		
@@ -264,7 +264,7 @@ class CountryController extends Controller
 				'iso3'		=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
 				'flag'		=> $r->flag,
 				'currency'	=> $r->currency,
-				'region'	=> isset($r->region) ? $r->region : NULL,
+				'region'	=> isset($r->region) ? ($r->region != null ? $r->region : NULL) : NULL,
 				'publish'	=> $r->publish,
 			]);
 

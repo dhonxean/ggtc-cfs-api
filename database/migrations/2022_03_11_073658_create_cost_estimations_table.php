@@ -16,10 +16,10 @@ class CreateCostEstimationsTable extends Migration
         Schema::create('cost_estimations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
+            $table->bigInteger('consumption')->nullable();
             $table->bigInteger('low')->nullable();
             $table->bigInteger('average')->nullable();
             $table->bigInteger('high')->nullable();
-            $table->bigInteger('consumption')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
