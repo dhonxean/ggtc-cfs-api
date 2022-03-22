@@ -385,7 +385,7 @@ class CountryController extends Controller
 	 **
 	 **/
 	public function allCountry(Request $r) {
-		$country = Country::when(isset($r->keyword), function ($query) use ($r) {
+		$resultData['country'] = Country::when(isset($r->keyword), function ($query) use ($r) {
 					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%');	
 				})
 				->when(isset($r->sort_by), function ($query) use ($r) {
@@ -399,8 +399,25 @@ class CountryController extends Controller
 				->where('publish', 1)
 				->get();
 
+		$resultData['selected_country'] = Country::when(isset($r->selected_country), function ($query) use ($r) {
+			$query->where('iso2', $r->selected_country);
+		})
+		->with([
+			'country_detail', 
+			'cost_estimation', 
+			'marine_waste', 
+			'urban_waste', 
+			// 'threats', 
+			// 'recommendations', 
+			'references', 
+			'companies', 
+			'meta_data'
+		])
+		->where('publish', 1)
+		->first();
+		
 		return response([
-			'res' => $country
+			'res' => $resultData
 		]);
 	}
 }
