@@ -17,10 +17,9 @@ class CreateCountryDetailsTable extends Migration
         Schema::create('country_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
-            $table->decimal('economic_losses', $precision = 20, $scale = 2)->nullable();
-            $table->decimal('death', $precision = 20, $scale = 2)->nullable();
-            $table->text('gti_facts')->nullable();
-            $table->text('policy')->nullable();
+            $table->bigInteger('death')->nullable();
+            $table->text('csr_local_examples')->nullable();
+            $table->text('csr_policy')->nullable();
             $table->text('acknowledgement')->nullable();
             $table->softDeletes();
             $table->timestamps();

@@ -45,12 +45,4 @@ class Country extends Model
     public function meta_data() {
         return $this->hasOne(CountryMetadata::class, 'country_id', 'id');
     }
-
-    public function marine_waste() {
-        return $this->hasOne(MarineWaste::class, 'country_id', 'id');
-    }
-
-    public function urban_waste() {
-        return $this->hasOne(UrbanWaste::class, 'country_id', 'id');
-    }
 }

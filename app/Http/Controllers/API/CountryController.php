@@ -12,11 +12,7 @@ use App\Models\{
 	Country,
 	CountryDetail,
 	CostEstimation,
-	MarineWaste,
-	UrbanWaste,
 	CountryCompany,
-	CountryThreatEnvironment,
-	CountryRecommendation,
 	CountryReference,
 	CountryMetadata,
 };
@@ -55,31 +51,22 @@ class CountryController extends Controller
 			'region'  	      			=> 'sometimes',
 			'publish'  	  				=> 'required',
 			// country details
-			'economic_losses' 			=> 'required',
 			'death' 					=> 'required',
-			'gti_facts' 				=> 'required',
-			'policy' 					=> 'required',
+			'csr_local_examples' 		=> 'required',
+			'csr_policy' 				=> 'required',
 			'acknowledgement' 			=> 'required',
 			// cost estimations
-			'low_estimate' 				=> 'required',
-			'average_estimate' 	    	=> 'required',
-			'high_estimate' 	    	=> 'required',
-			'consumption' 	    		=> 'sometimes',
-			// marine waste
-			'marine_cost_1' 	    	=> 'required',
-			'marine_cost_year_1' 		=> 'required',
-			'marine_cost_2' 	    	=> 'required',
-			'marine_cost_year_2' 		=> 'required',
-			'marine_cost_total' 		=> 'required',
-			// urban waste
-			'urban_cost_1' 	    		=> 'required',
-			'urban_cost_year_1' 		=> 'required',
-			'urban_cost_2' 	    		=> 'required',
-			'urban_cost_year_2' 		=> 'required',
-			'urban_cost_total' 			=> 'required',
+			'marine_pollution' 			=> 'required',
+			'waste_management' 			=> 'required',
+			'partial_cost' 				=> 'required',
+			'marine_cost_per_ton' 		=> 'required',
+			'waste_cost_per_ton' 		=> 'required',
+			'cigarettes_consumed' 		=> 'required',
+			'economic_cost' 			=> 'required',
+			'economic_cost_currency' 	=> 'required',
 			// references
-			'reference'					=> 'required|array',
-			'reference_sequence'		=> 'required|array',
+			'reference'					=> 'sometimes|array',
+			'reference_sequence'		=> 'sometimes|array',
 			// companies
 			'company' 					=> 'required|array',
 			'company_sequence' 			=> 'required|array',
@@ -100,7 +87,7 @@ class CountryController extends Controller
 			'iso3'		=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
 			'flag'		=> $r->flag,
 			'currency'	=> $r->currency,
-			'region'	=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : NULL) : NULL,
+			'region'	=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : '') : '',
 			'publish'	=> $r->publish,
 		]);
 		
@@ -114,37 +101,22 @@ class CountryController extends Controller
 
 		CountryDetail::create([
 			'country_id' 			=> $country->id,
-			'economic_losses'		=> $r->economic_losses,
-			'death'					=> 	$r->death,
-			'policy'				=> $r->policy,
-			'gti_facts'				=> $r->gti_facts,
+			'death'					=> $r->death,
+			'csr_local_examples'	=> $r->csr_local_examples,
+			'csr_policy'			=> $r->csr_policy,
 			'acknowledgement'		=> $r->acknowledgement,
 		]);
 
 		CostEstimation::create([
-			'country_id'	=> $country->id,
-			'low'			=> $r->low_estimate,
-			'average'		=> $r->average_estimate,
-			'high'			=> $r->high_estimate,
-			'consumption'	=> $r->consumption,
-		]);
-
-		MarineWaste::create([
-			'country_id'			=> $country->id,
-			'cost_1'				=> $r->marine_cost_1,
-			'cost_year_1'			=> $r->marine_cost_year_1,
-			'cost_2'				=> $r->marine_cost_2,
-			'cost_year_2'			=> $r->marine_cost_year_2,
-			'cost_of_collection'	=> $r->marine_cost_total,
-		]);
-
-		UrbanWaste::create([
-			'country_id'			=> $country->id,
-			'cost_1'				=> $r->urban_cost_1,
-			'cost_year_1'			=> $r->urban_cost_year_1,
-			'cost_2'				=> $r->urban_cost_2,
-			'cost_year_2'			=> $r->urban_cost_year_2,
-			'cost_of_collection'	=> $r->urban_cost_total,
+			'country_id'				=> $country->id,
+			'marine_pollution'			=> $r->marine_pollution,
+			'waste_management'			=> $r->waste_management,
+			'partial_cost'				=> $r->partial_cost,
+			'marine_cost_per_ton'		=> $r->marine_cost_per_ton,
+			'waste_cost_per_ton'		=> $r->waste_cost_per_ton,
+			'cigarettes_consumed'		=> $r->cigarettes_consumed,
+			'economic_cost'				=> $r->economic_cost,
+			'economic_cost_currency'	=> $r->economic_cost_currency,
 		]);
 
 		if (!empty($r->reference)) {
@@ -169,7 +141,7 @@ class CountryController extends Controller
 			}
 		}
 
-		$country->load('country_detail', 'cost_estimation', 'marine_waste','urban_waste', 'references', 'companies', 'meta_data');
+		$country->load('country_detail', 'cost_estimation', 'references', 'companies', 'meta_data');
 		
 		return response([
 			'res' => $country
@@ -181,10 +153,6 @@ class CountryController extends Controller
 				->with([
 					'country_detail', 
 					'cost_estimation', 
-					'marine_waste', 
-					'urban_waste', 
-					// 'threats', 
-					// 'recommendations', 
 					'references', 
 					'companies', 
 					'meta_data'
@@ -216,31 +184,22 @@ class CountryController extends Controller
 			'region'  	      			=> 'sometimes',
 			'publish'  	  				=> 'required',
 			// country details
-			'economic_losses' 			=> 'required',
 			'death' 					=> 'required',
-			'policy' 					=> 'required',
-			'gti_facts' 				=> 'required',
+			'csr_local_examples' 		=> 'required',
+			'csr_policy' 				=> 'required',
 			'acknowledgement' 			=> 'required',
 			// cost estimations
-			'low_estimate' 				=> 'required',
-			'average_estimate' 	    	=> 'required',
-			'high_estimate' 	    	=> 'required',
-			'consumption' 	    		=> 'required',
-			// marine waste
-			'marine_cost_1' 	    	=> 'required',
-			'marine_cost_year_1' 		=> 'required',
-			'marine_cost_2' 	    	=> 'required',
-			'marine_cost_year_2' 		=> 'required',
-			'marine_cost_total' 		=> 'required',
-			// urban waste
-			'urban_cost_1' 	    		=> 'required',
-			'urban_cost_year_1' 		=> 'required',
-			'urban_cost_2' 	    		=> 'required',
-			'urban_cost_year_2' 		=> 'required',
-			'urban_cost_total' 			=> 'required',
+			'marine_pollution' 			=> 'required',
+			'waste_management' 		=> 'required',
+			'partial_cost' 				=> 'required',
+			'marine_cost_per_ton' 		=> 'required',
+			'waste_cost_per_ton' 		=> 'required',
+			'cigarettes_consumed' 		=> 'required',
+			'economic_cost' 			=> 'required',
+			'economic_cost_currency' 	=> 'required',
 			// references
-			'reference'					=> 'required|array',
-			'reference_sequence'		=> 'required|array',
+			'reference'					=> 'sometimes|array',
+			'reference_sequence'		=> 'sometimes|array',
 			// companies
 			'company' 					=> 'required|array',
 			'company_sequence' 			=> 'required|array',
@@ -264,7 +223,7 @@ class CountryController extends Controller
 				'iso3'		=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
 				'flag'		=> $r->flag,
 				'currency'	=> $r->currency,
-				'region'	=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : NULL) : NULL,
+				'region'	=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : '') : '',
 				'publish'	=> $r->publish,
 			]);
 
@@ -274,34 +233,21 @@ class CountryController extends Controller
 			]);
 
 			$country->country_detail->update([
-				'economic_losses'		=> $r->economic_losses,
 				'death'					=> $r->death,
-				'policy'				=> $r->policy,
-				'gti_facts'				=> $r->gti_facts,
+				'csr_local_examples'	=> $r->csr_local_examples,
+				'csr_policy'			=> $r->csr_policy,
 				'acknowledgement'		=> $r->acknowledgement,
 			]);
 
 			$country->cost_estimation->update([
-				'low'			=> $r->low_estimate,
-				'average'		=> $r->average_estimate,
-				'high'			=> $r->high_estimate,
-				'consumption'	=> $r->consumption,
-			]);
-
-			$country->marine_waste->update([
-				'cost_1'				=> $r->marine_cost_1,
-				'cost_year_1'			=> $r->marine_cost_year_1,
-				'cost_2'				=> $r->marine_cost_2,
-				'cost_year_2'			=> $r->marine_cost_year_2,
-				'cost_of_collection'	=> $r->marine_cost_total,
-			]);
-
-			$country->urban_waste->update([
-				'cost_1'				=> $r->urban_cost_1,
-				'cost_year_1'			=> $r->urban_cost_year_1,
-				'cost_2'				=> $r->urban_cost_2,
-				'cost_year_2'			=> $r->urban_cost_year_2,
-				'cost_of_collection'	=> $r->urban_cost_total,
+				'marine_pollution'			=> $r->marine_pollution,
+				'waste_management'			=> $r->waste_management,
+				'partial_cost'				=> $r->partial_cost,
+				'marine_cost_per_ton'		=> $r->marine_cost_per_ton,
+				'waste_cost_per_ton'		=> $r->waste_cost_per_ton,
+				'cigarettes_consumed'		=> $r->cigarettes_consumed,
+				'economic_cost'				=> $r->economic_cost,
+				'economic_cost_currency'	=> $r->economic_cost_currency,
 			]);
 	
 			if (!empty($r->reference)) {
@@ -326,7 +272,7 @@ class CountryController extends Controller
 				}
 			}
 
-			$country->load('country_detail', 'cost_estimation', 'marine_waste','urban_waste', 'references', 'companies', 'meta_data');
+			$country->load('country_detail', 'cost_estimation', 'references', 'companies', 'meta_data');
 		
 			return response([
 				'res' => $country
@@ -405,10 +351,6 @@ class CountryController extends Controller
 		->with([
 			'country_detail', 
 			'cost_estimation', 
-			'marine_waste', 
-			'urban_waste', 
-			// 'threats', 
-			// 'recommendations', 
 			'references', 
 			'companies', 
 			'meta_data'
