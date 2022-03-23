@@ -21,7 +21,7 @@ class CreateCostEstimationsTable extends Migration
             $table->decimal('partial_cost', $precision = 20, $scale = 2)->nullable();
             $table->decimal('marine_cost_per_ton', $precision = 20, $scale = 2)->nullable();
             $table->decimal('waste_cost_per_ton', $precision = 20, $scale = 2)->nullable();
-            $table->decimal('cigarettes_consumed', $precision = 20, $scale = 2)->nullable();
+            $table->bigInteger('cigarettes_consumed')->nullable();
             $table->decimal('economic_cost', $precision = 20, $scale = 2)->nullable();
             $table->string('economic_cost_currency')->nullable();
             $table->timestamps();
