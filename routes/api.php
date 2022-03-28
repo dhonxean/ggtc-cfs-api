@@ -6,6 +6,7 @@ use App\Http\Controllers\API\{
 	AdminController,
 	CountryController,
 	CompanyController,
+	CurrencyRateController,
 };
 
 /*
@@ -56,6 +57,15 @@ Route::group(['prefix' => 'v1'], function () {
 				});
 			});
 		});
+
+		// currency rate
+		Route::group(['prefix' => 'currency-rate'], function () {
+			Route::controller(CurrencyRateController::class)->group(function () {
+				Route::middleware('auth.admin')->group( function () {
+					Route::get('test', 'test');
+				});
+			});
+		});
 	});
 
 	// Web routes
@@ -63,6 +73,7 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::group(['prefix' => 'country'], function () {
 			Route::controller(CountryController::class)->group(function () {
 				Route::get('get-all-country', 'allCountry');
+				Route::post('generate-image-pdf', 'generate');
 			});
 		});
 	});

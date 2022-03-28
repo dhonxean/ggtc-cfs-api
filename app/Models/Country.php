@@ -45,4 +45,8 @@ class Country extends Model
     public function meta_data() {
         return $this->hasOne(CountryMetadata::class, 'country_id', 'id');
     }
+
+    public function currency_rate() {
+        return $this->hasOne(CurrencyRate::class, 'name', 'currency');
+    }
 }

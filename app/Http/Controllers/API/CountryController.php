@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use PDF;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\{
@@ -227,19 +229,25 @@ class CountryController extends Controller
 				'publish'	=> $r->publish,
 			]);
 
-			$country->meta_data->update([
+			CountryMetadata::updateOrCreate([
+				'country_id' => $country->id,
+			],[
 				'meta_title'		=> isset($r->meta_title) ? $r->meta_title : $r->name,
 				'meta_description'	=> isset($r->meta_description) ? $r->meta_description : $r->threat_to_environment,
 			]);
 
-			$country->country_detail->update([
+			CountryDetail::updateOrCreate([
+				'country_id' => $country->id,
+			],[
 				'death'					=> $r->death,
 				'csr_local_examples'	=> $r->csr_local_examples,
 				'csr_policy'			=> $r->csr_policy,
 				'acknowledgement'		=> $r->acknowledgement,
 			]);
 
-			$country->cost_estimation->update([
+			CostEstimation::updateOrCreate([
+				'country_id' => $country->id,
+			],[
 				'marine_pollution'			=> $r->marine_pollution,
 				'waste_management'			=> $r->waste_management,
 				'partial_cost'				=> $r->partial_cost,
@@ -353,13 +361,49 @@ class CountryController extends Controller
 			'cost_estimation', 
 			'references', 
 			'companies', 
-			'meta_data'
+			'meta_data',
+			'currency_rate'
 		])
 		->where('publish', 1)
 		->first();
 		
 		return response([
 			'res' => $resultData
+		]);
+	}
+
+	public function generate(Request $r) {
+		$countryCode = $r->countryCode;
+
+		// generate pdf save to storage
+		$pdf = PDF::loadView('pdf', [
+			'pdfs' => $r->pdfs
+		])
+		->setPaper('a4', 'portrait')
+		->setOptions([
+			'isHtml5ParserEnabled' => true,
+			'dpi' => 150
+		]);
+
+		$filename = "Customized Fact Sheet - $countryCode.pdf";
+
+		Storage::disk('public')->put("uploads/pdf-reports/$filename", $pdf->output());
+
+		$url = url('/') . "/storage/uploads/pdf-reports/$filename";
+
+		/* generate and save image to storage */
+		$image_64 = $r->image;
+		$extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
+		$replace = substr($image_64, 0, strpos($image_64, ',')+1); 
+		$image = str_replace($replace, '', $image_64); 
+		$image = str_replace(' ', '+', $image); 
+		$imageName = "Customized_Fact_Sheet_-_$countryCode.$extension";
+
+		Storage::disk('public')->put("uploads/image-reports/$imageName", base64_decode($image));
+		/* end */
+
+		return response([
+			'download_url' => $url
 		]);
 	}
 }
