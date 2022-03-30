@@ -33,7 +33,7 @@
 			height: 100%;
 			margin: 0 auto;
 			background-repeat: no-repeat;
-			background-position: center;
+			background-position: center top;
 			background-size: contain;
 		}
 	</style>
