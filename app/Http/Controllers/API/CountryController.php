@@ -98,7 +98,7 @@ class CountryController extends Controller
 		CountryMetadata::create([
 			'country_id'		=> $country->id,
 			'meta_title'		=> isset($r->meta_title) ? $r->meta_title : $r->name,
-			'meta_description'		=> isset($r->meta_description) ? $r->meta_description : $r->threat_to_environment,
+			'meta_description'		=> isset($r->meta_description) ? $r->meta_description : $r->csr_policy,
 		]);
 
 		CountryDetail::create([

@@ -7,6 +7,7 @@ use App\Http\Controllers\API\{
 	CountryController,
 	CompanyController,
 	CurrencyRateController,
+	ImportController,
 };
 
 /*
@@ -63,6 +64,15 @@ Route::group(['prefix' => 'v1'], function () {
 			Route::controller(CurrencyRateController::class)->group(function () {
 				Route::middleware('auth.admin')->group( function () {
 					Route::get('test', 'test');
+				});
+			});
+		});
+
+		// imports
+		Route::group(['prefix' => 'import'], function () {
+			Route::controller(ImportController::class)->group(function () {
+				Route::middleware('auth.admin')->group( function () {
+					Route::post('country', 'importCountry');
 				});
 			});
 		});
