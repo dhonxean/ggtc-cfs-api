@@ -191,11 +191,6 @@ class CountryImport implements ToCollection
 								}
 							}
 						}
-
-						# check if has references
-						if (count($references) > 0) {
-							
-						}
 					}
 
 					if ($countryExisted) {
