@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             UpdateCurrencyRate::dispatch();
-        })->everyThreeMinutes();
+        })->daily();
     }
 
     /**
