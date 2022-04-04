@@ -20,6 +20,7 @@ class CreateCountriesTable extends Migration
             $table->string('iso3')->nullable();
             $table->binary('flag')->nullable();
             $table->string('currency')->nullable();
+            $table->string('currency_symbol')->nullable();
             $table->string('region')->nullable();
             $table->integer('publish')->default(0);
             $table->softDeletes();

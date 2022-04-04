@@ -42,20 +42,21 @@ class CountryImport implements ToCollection
 					$name = $row[0];
 					$iso2 = $row[1];
 					$currency = $row[2];
-					$region = $row[3];
-					$csr_local_examples = $row[4];
-					$csr_policy = $row[5];
-					$acknowledgement = $row[6];
-					$companies = $row[7] != '' ? explode(',', $row[7]) : [];
-					$death = $row[8];
-					$cigarettes_consumed = $row[9];
-					$economic_cost = $row[10];
-					$economic_cost_currency = $row[11];
-					$marine_pollution = $row[12];
-					$waste_management = $row[13];
-					$marine_cost_per_ton = $row[14];
-					$waste_cost_per_ton = $row[15];
-					$partial_cost = $row[16];
+					$currency_symbol = $row[3];
+					$region = $row[4];
+					$csr_local_examples = $row[5];
+					$csr_policy = $row[6];
+					$acknowledgement = $row[7];
+					$companies = $row[8] != '' ? explode(',', $row[8]) : [];
+					$death = $row[9];
+					$cigarettes_consumed = $row[10];
+					$economic_cost = $row[11];
+					$economic_cost_currency = $row[12];
+					$marine_pollution = $row[13];
+					$waste_management = $row[14];
+					$marine_cost_per_ton = $row[15];
+					$waste_cost_per_ton = $row[16];
+					$partial_cost = $row[17];
 
 					$countryExisted = false;
 					$country = Country::where('iso2', $iso2)->first();
@@ -63,11 +64,12 @@ class CountryImport implements ToCollection
 					# insert country
 					if (!$country) {
 						$country_id = Country::create([
-							'name' 		=> $name,
-							'iso2'		=> $iso2,
-							'currency'	=> $currency,
-							'region'	=> isset($region) ? ($region != null && $region != '' ? $region : '') : '',
-							'publish'	=> 0,
+							'name' 				=> $name,
+							'iso2'				=> $iso2,
+							'currency'			=> $currency,
+							'currency_symbol'	=> $currency_symbol,
+							'region'			=> isset($region) ? ($region != null && $region != '' ? $region : '') : '',
+							'publish'			=> 0,
 						]);
 						
 						$country = Country::find($iso2);

@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use App\Imports\{
-	CountryImport
+	CountryImport,
+	CountryReferenceImport,
+	CompanyImport,
 };
 use App\Models\{ 
 	Country,
@@ -43,7 +45,14 @@ class ImportController extends Controller
 				return $countryImport->results;
 				break;
 			case 'reference':
-
+				$countryReference = new CountryReferenceImport;
+				Excel::import($countryReference, $r->file);
+				return $countryReference->results;
+				break;
+			case 'company':
+				$company = new CompanyImport;
+				Excel::import($company, $r->file);
+				return $company->results;
 				break;
 			default:
 				return response([

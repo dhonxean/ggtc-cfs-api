@@ -36,6 +36,7 @@ class CountryController extends Controller
 					'iso3' => $value['iso3'],
 					'flag' => $value['emoji'],
 					'currency' => $value['currency'],
+					'currency_symbol' => $value['currency_symbol'],
 					'region' => $value['region'],
 					'publish' => 0,
 				]);
@@ -50,6 +51,7 @@ class CountryController extends Controller
 			'country_code_2'  			=> 'sometimes',
 			// 'flag'  		  			=> 'required',
 			'currency'  	  			=> 'required',
+			'currency_symbol'  	  		=> 'required',
 			'region'  	      			=> 'sometimes',
 			'publish'  	  				=> 'required',
 			// country details
@@ -64,8 +66,10 @@ class CountryController extends Controller
 			'marine_cost_per_ton' 		=> 'required',
 			'waste_cost_per_ton' 		=> 'required',
 			'cigarettes_consumed' 		=> 'required',
+			'cigarettes_consumed_unit' 	=> 'required',
 			'economic_cost' 			=> 'required',
 			'economic_cost_currency' 	=> 'required',
+			'cigarettes_sticks' 		=> 'required',
 			// references
 			'reference'					=> 'sometimes|array',
 			'reference_sequence'		=> 'sometimes|array',
@@ -84,13 +88,14 @@ class CountryController extends Controller
 		}
 
 		$countryId = Country::create([
-			'name' 		=> $r->name,
-			'iso2'		=> $r->country_code,
-			'iso3'		=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
+			'name' 				=> $r->name,
+			'iso2'				=> $r->country_code,
+			'iso3'				=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
 			// 'flag'		=> $r->flag,
-			'currency'	=> $r->currency,
-			'region'	=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : '') : '',
-			'publish'	=> $r->publish,
+			'currency'			=> $r->currency,
+			'currency_symbol'	=> $r->currency_symbol,
+			'region'			=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : '') : '',
+			'publish'			=> $r->publish,
 		]);
 		
 		$country = Country::find($r->country_code);
@@ -117,8 +122,10 @@ class CountryController extends Controller
 			'marine_cost_per_ton'		=> $r->marine_cost_per_ton,
 			'waste_cost_per_ton'		=> $r->waste_cost_per_ton,
 			'cigarettes_consumed'		=> $r->cigarettes_consumed,
+			'cigarettes_consumed_unit'		=> $r->cigarettes_consumed_unit,
 			'economic_cost'				=> $r->economic_cost,
 			'economic_cost_currency'	=> $r->economic_cost_currency,
+			'cigarettes_sticks'	=> $r->cigarettes_sticks,
 		]);
 
 		if (!empty($r->reference)) {
@@ -183,6 +190,7 @@ class CountryController extends Controller
 			'country_code_2'  			=> 'sometimes',
 			// 'flag'  		  			=> 'required',
 			'currency'  	  			=> 'required',
+			'currency_symbol'  	  		=> 'required',
 			'region'  	      			=> 'sometimes',
 			'publish'  	  				=> 'required',
 			// country details
@@ -192,13 +200,15 @@ class CountryController extends Controller
 			'acknowledgement' 			=> 'required',
 			// cost estimations
 			'marine_pollution' 			=> 'required',
-			'waste_management' 		=> 'required',
+			'waste_management' 			=> 'required',
 			'partial_cost' 				=> 'required',
 			'marine_cost_per_ton' 		=> 'required',
 			'waste_cost_per_ton' 		=> 'required',
 			'cigarettes_consumed' 		=> 'required',
+			'cigarettes_consumed_unit' 	=> 'required',
 			'economic_cost' 			=> 'required',
 			'economic_cost_currency' 	=> 'required',
+			'cigarettes_sticks' 		=> 'required',
 			// references
 			'reference'					=> 'sometimes|array',
 			'reference_sequence'		=> 'sometimes|array',
@@ -220,13 +230,14 @@ class CountryController extends Controller
 
 		if ($country) {
 			$country->update([
-				'name' 		=> $r->name,
-				'iso2'		=> $r->country_code,
-				'iso3'		=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
-				// 'flag'		=> $r->flag,
-				'currency'	=> $r->currency,
-				'region'	=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : '') : '',
-				'publish'	=> $r->publish,
+				'name' 				=> $r->name,
+				'iso2'				=> $r->country_code,
+				'iso3'				=> isset($r->country_code_2) ? $r->country_code_2 : NULL,
+				// 'flag'			=> $r->flag,
+				'currency'			=> $r->currency,
+				'currency_symbol'	=> $r->currency_symbol,
+				'region'			=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : '') : '',
+				'publish'			=> $r->publish,
 			]);
 
 			CountryMetadata::updateOrCreate([
@@ -254,8 +265,10 @@ class CountryController extends Controller
 				'marine_cost_per_ton'		=> $r->marine_cost_per_ton,
 				'waste_cost_per_ton'		=> $r->waste_cost_per_ton,
 				'cigarettes_consumed'		=> $r->cigarettes_consumed,
+				'cigarettes_consumed_unit'	=> $r->cigarettes_consumed_unit,
 				'economic_cost'				=> $r->economic_cost,
 				'economic_cost_currency'	=> $r->economic_cost_currency,
+				'cigarettes_sticks'			=> $r->cigarettes_sticks,
 			]);
 	
 			if (!empty($r->reference)) {
