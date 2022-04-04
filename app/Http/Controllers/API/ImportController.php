@@ -26,7 +26,8 @@ class ImportController extends Controller
 
 	public function importCountry(Request $r) {
 		$validator = \Validator::make($r->all(), [
-			'file'  => 'required'
+			'file'  => 'required',
+			'type'  => 'required',
 		]);
 
 		if ($validator->fails()) {
@@ -35,9 +36,20 @@ class ImportController extends Controller
 			], 400);
 		}
 
-		$countryImport = new countryImport;
-		Excel::import($countryImport, $r->file);
+		switch ($r->type) {
+			case 'country':
+				$countryImport = new countryImport;
+				Excel::import($countryImport, $r->file);
+				return $countryImport->results;
+				break;
+			case 'reference':
 
-		return $countryImport->results;
+				break;
+			default:
+				return response([
+					'errors' => ['Unknown import template!']
+				]);
+				break;
+		}
 	}
 }
