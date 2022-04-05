@@ -51,7 +51,7 @@ class CountryController extends Controller
 			'country_code_2'  			=> 'sometimes',
 			// 'flag'  		  			=> 'required',
 			'currency'  	  			=> 'required',
-			'currency_symbol'  	  		=> 'required',
+			'currency_symbol'  	  		=> 'sometimes',
 			'region'  	      			=> 'sometimes',
 			'publish'  	  				=> 'required',
 			// country details
@@ -190,7 +190,7 @@ class CountryController extends Controller
 			'country_code_2'  			=> 'sometimes',
 			// 'flag'  		  			=> 'required',
 			'currency'  	  			=> 'required',
-			'currency_symbol'  	  		=> 'required',
+			'currency_symbol'  	  		=> 'sometimes',
 			'region'  	      			=> 'sometimes',
 			'publish'  	  				=> 'required',
 			// country details
