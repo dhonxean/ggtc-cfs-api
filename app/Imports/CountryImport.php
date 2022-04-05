@@ -50,13 +50,15 @@ class CountryImport implements ToCollection
 					$companies = $row[8] != '' ? explode(',', $row[8]) : [];
 					$death = $row[9];
 					$cigarettes_consumed = $row[10];
-					$economic_cost = $row[11];
-					$economic_cost_currency = $row[12];
-					$marine_pollution = $row[13];
-					$waste_management = $row[14];
-					$marine_cost_per_ton = $row[15];
-					$waste_cost_per_ton = $row[16];
-					$partial_cost = $row[17];
+					$cigarettes_consumed_unit = $row[11];
+					$economic_cost = $row[12];
+					$economic_cost_currency = $row[13];
+					$cigarettes_sticks = $row[14];
+					$marine_pollution = $row[15];
+					$waste_management = $row[16];
+					$marine_cost_per_ton = $row[17];
+					$waste_cost_per_ton = $row[18];
+					$partial_cost = $row[19];
 
 					$countryExisted = false;
 					$country = Country::where('iso2', $iso2)->first();
@@ -96,8 +98,10 @@ class CountryImport implements ToCollection
 							'marine_cost_per_ton'		=> $marine_cost_per_ton,
 							'waste_cost_per_ton'		=> $waste_cost_per_ton,
 							'cigarettes_consumed'		=> $cigarettes_consumed,
+							'cigarettes_consumed_unit'	=> $cigarettes_consumed_unit,
 							'economic_cost'				=> $economic_cost,
 							'economic_cost_currency'	=> $economic_cost_currency,
+							'cigarettes_sticks'			=> $cigarettes_sticks,
 						]);
 							
 						# check if has company
