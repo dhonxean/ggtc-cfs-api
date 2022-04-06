@@ -64,6 +64,7 @@ Route::group(['prefix' => 'v1'], function () {
 			Route::controller(CurrencyRateController::class)->group(function () {
 				Route::middleware('auth.admin')->group( function () {
 					Route::get('test', 'test');
+					Route::get('get-currency', 'getCurrency');
 				});
 			});
 		});

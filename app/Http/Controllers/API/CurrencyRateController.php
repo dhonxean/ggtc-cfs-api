@@ -26,4 +26,19 @@ class CurrencyRateController extends Controller
 		// 	]);
 		// }
 	}
+
+	public function getCurrency() {
+		$currencyRate = CurrencyRate::get();
+
+		if ($currencyRate) {
+			return response([
+				'res' => $currencyRate
+			]);
+		}
+		else {
+			return response([
+				'errors' => ['Currency code not found.']
+			]);
+		}
+	}
 }
