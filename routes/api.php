@@ -8,6 +8,8 @@ use App\Http\Controllers\API\{
 	CompanyController,
 	CurrencyRateController,
 	ImportController,
+	LanguageController,
+	WorldCountryController,
 };
 
 /*
@@ -85,6 +87,32 @@ Route::group(['prefix' => 'v1'], function () {
 			Route::controller(CountryController::class)->group(function () {
 				Route::get('get-all-country', 'allCountry');
 				Route::post('generate-image-pdf', 'generate');
+			});
+		});
+	});
+});
+
+Route::group(['prefix' => 'v2'], function () {
+	// Admin routes
+	Route::group(['prefix' => 'admin'], function () {
+		// language routes
+		Route::group(['prefix' => 'language'], function () {
+			Route::controller(LanguageController::class)->group(function () {
+				Route::middleware('auth.admin')->group( function () {
+					Route::post('/import', 'importLanguage');
+					Route::post('/create', 'create');
+					Route::get('/info/{id}', 'info');
+					Route::post('/update/{id}', 'update');
+				});
+			});
+		});
+
+		// world country routes
+		Route::group(['prefix' => 'world-country'], function () {
+			Route::controller(WorldCountryController::class)->group(function () {
+				Route::middleware('auth.admin')->group( function () {
+					Route::post('/import-countries', 'import');
+				});
 			});
 		});
 	});
