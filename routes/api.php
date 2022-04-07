@@ -10,6 +10,7 @@ use App\Http\Controllers\API\{
 	ImportController,
 	LanguageController,
 	WorldCountryController,
+	StaticTranslationController,
 };
 
 /*
@@ -119,6 +120,15 @@ Route::group(['prefix' => 'v2'], function () {
 					Route::post('/update/{id}', 'update');
 					Route::delete('/delete/{id}', 'delete');
 					Route::post('/get-all-world-country', 'getAllCountry');
+				});
+			});
+		});
+
+		// static translation routes
+		Route::group(['prefix' => 'static-translation'], function () {
+			Route::controller(StaticTranslationController::class)->group(function () {
+				Route::middleware('auth.admin')->group( function () {
+					Route::post('/import-static-translation', 'import');
 				});
 			});
 		});
