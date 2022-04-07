@@ -12,7 +12,10 @@ use App\Models\{
 
 class LanguageController extends Controller
 {
-	//
+	/**
+	 ** ###[ CMS APIs ]###########################
+	**
+	**/
 	public function importLanguage(Request $r) {
 		foreach($r->request as $key => $value) {
 			$language = Language::where('name', $value['name'])->first();
@@ -94,5 +97,47 @@ class LanguageController extends Controller
 				'errors' => ['Language not found.']
 			]);
 		}
+	}
+
+	public function delete($id, Request $r) {
+		$language = Language::where('id', $id)->first();
+
+		if ($language) {
+			$language->delete();
+
+			return response([
+				'res' => ['language deleted.']
+			]);
+		}
+		else {
+			return response([
+				'errors' => ['Language not found.']
+			]);
+		}
+	}
+
+	public function getAllLanguage(Request $r) {
+		$language = Language::when(isset($r->keyword), function ($query) use ($r) {
+					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%')
+					->orWhere('code', 'LIKE', '%' . strtolower($r->keyword) . '%');
+				})
+				->when(isset($r->sort_by), function ($query) use ($r) {
+					if ($r->order_type == 'desc') {
+						$query->orderByDesc($r->sort_by);
+					}
+					else {
+						$query->orderBy($r->sort_by);
+					}
+				})
+				->when( $r->filled('all') , function ($q, $r) {
+					return $q->get();
+				}, function ($q) {
+					return $q->paginate(20);
+				});
+
+
+		return response([
+			'res' => $language
+		]);
 	}
 }

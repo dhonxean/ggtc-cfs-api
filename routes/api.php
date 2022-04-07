@@ -103,6 +103,8 @@ Route::group(['prefix' => 'v2'], function () {
 					Route::post('/create', 'create');
 					Route::get('/info/{id}', 'info');
 					Route::post('/update/{id}', 'update');
+					Route::delete('/delete/{id}', 'delete');
+					Route::post('/get-all-language', 'getAllLanguage');
 				});
 			});
 		});
@@ -112,6 +114,11 @@ Route::group(['prefix' => 'v2'], function () {
 			Route::controller(WorldCountryController::class)->group(function () {
 				Route::middleware('auth.admin')->group( function () {
 					Route::post('/import-countries', 'import');
+					Route::post('/create', 'create');
+					Route::get('/info/{id}', 'info');
+					Route::post('/update/{id}', 'update');
+					Route::delete('/delete/{id}', 'delete');
+					Route::post('/get-all-world-country', 'getAllCountry');
 				});
 			});
 		});

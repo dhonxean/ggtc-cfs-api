@@ -14,4 +14,8 @@ class WorldCountry extends Model
     public $table     = 'world_countries';
 
     protected $guarded = ['created_at'];
+
+    public function language() {
+        return $this->hasOne(Language::class, 'id', 'language_id');
+    }
 }
