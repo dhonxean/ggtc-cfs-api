@@ -14,4 +14,8 @@ class Language extends Model
     public $table     = 'languages';
 
     protected $guarded = ['created_at'];
+
+    public function static_translation() {
+        return $this->hasOne(StaticTranslation::class, 'language_id', 'id');
+    }
 }

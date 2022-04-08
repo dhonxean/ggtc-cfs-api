@@ -104,5 +104,24 @@ class StaticTranslationController extends Controller
 		// }
 	}
 
-	
+	public function getAvailableLanguage() {
+		$language = Language::doesntHave('static_translation')
+					->get();
+
+		return response([
+			'res' => $language
+		]);
+	}
+
+	public function create(Request $r) {
+		$validator = \Validator::make($r->all(), [
+			'language_id'    => 'required|unique:static_translations,language_id',
+		]);
+
+		if ($validator->fails()) {
+			return response([
+				'errors' => $validator->errors()->all()
+			], 400);
+		}
+	}
 }

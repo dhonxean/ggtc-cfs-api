@@ -129,6 +129,8 @@ Route::group(['prefix' => 'v2'], function () {
 			Route::controller(StaticTranslationController::class)->group(function () {
 				Route::middleware('auth.admin')->group( function () {
 					Route::post('/import-static-translation', 'import');
+					Route::get('/get-available-language', 'getAvailableLanguage');
+					Route::post('/create', 'create');
 				});
 			});
 		});
