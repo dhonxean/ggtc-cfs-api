@@ -17,6 +17,11 @@ class StaticTranslationController extends Controller
 	 ** ###[ CMS APIs ]###########################
 	**
 	**/
+
+	/**
+	 ** Insert default content fields to all type of language
+	**
+	**/
 	public function import (Request $r) {
 		// {
 		// 	"header_title": "Customized Fact Sheet",
@@ -75,6 +80,29 @@ class StaticTranslationController extends Controller
 		// 	"partial_modal": "<span>Partial Cost</span> is an ANNUAL COST which is the sum of Waste Management Cost (World Bank) and Marine Pollution Cost (Beaumont et al). It is called Partial Cost because Marine Pollution costs are conservative estimates and there are other costs that are not incorporated here such as accidental fires. It also excludes production related environmental impact such as deforestation and greenhouse gas emissions or impact of toxic emissions during use."
 		// }
 		
-		return json_decode($r->content);
+		// $default_content_fields = json_decode($r->content);
+		
+		$static_content = StaticTranslation::where('language_id', 0)->first();
+		$languages = Language::get();
+		if (!$static_content) {
+			StaticTranslation::create([
+				'language_id' 		=> 0,
+				'content_fields'	=> $r->content
+			]);
+		}
+
+		// uncomment this is importing all the languages with the default content 
+
+		// foreach ($languages as $key => $item) {
+		// 	$check_translation = StaticTranslation::where('language_id', $item->id)->first();
+		// 	if (!$check_translation) {
+		// 		StaticTranslation::create([
+		// 			'language_id' 		=> $item->id,
+		// 			'content_fields'	=> $r->content
+		// 		]);
+		// 	}
+		// }
 	}
+
+	
 }
