@@ -131,6 +131,10 @@ Route::group(['prefix' => 'v2'], function () {
 					Route::post('/import-static-translation', 'import');
 					Route::get('/get-available-language', 'getAvailableLanguage');
 					Route::post('/create', 'create');
+					Route::get('/info/{id}', 'info');
+					Route::post('/update/{id}', 'update');
+					Route::delete('/delete/{id}', 'delete');
+					Route::post('/get-all-static-translation', 'getAllStaticTranslation');
 				});
 			});
 		});
