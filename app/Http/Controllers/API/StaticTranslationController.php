@@ -115,13 +115,144 @@ class StaticTranslationController extends Controller
 
 	public function create(Request $r) {
 		$validator = \Validator::make($r->all(), [
-			'language_id'    => 'required|unique:static_translations,language_id',
+			'language_id'    			=> 'required|unique:static_translations,language_id',
+			'header_title'    			=> 'sometimes',
+			'dropdown_label'   			=> 'sometimes',
+			'download'    				=> 'sometimes',
+			'infographics_title'    	=> 'sometimes',
+			'cultivation'    			=> 'sometimes',
+			'curing'   					=> 'sometimes',
+			'process_manufacturing'		=> 'sometimes',
+			'distribution'    			=> 'sometimes',
+			'use'    					=> 'sometimes',
+			'disposal'    				=> 'sometimes',
+			'waste_management'    		=> 'sometimes',
+			'marine_pollution'    		=> 'sometimes',
+			'billion'    				=> 'sometimes',
+			'million'    				=> 'sometimes',
+			'trillion'    				=> 'sometimes',
+			'in_usd'    				=> 'sometimes',
+			'cost'   					=> 'sometimes',
+			'cigarettes_consumed'   	=> 'sometimes',
+			'waste_management_costs'	=> 'sometimes',
+			'consuming'    				=> 'sometimes',
+			'sticks_of_cigarettes' 		=> 'sometimes',
+			'produced_mainly'    		=> 'sometimes',
+			'references'   				=> 'sometimes',
+			'show_less'    				=> 'sometimes',
+			'show_more'    				=> 'sometimes',
+			'threat_title'    			=> 'sometimes',
+			'threat_p_1'    			=> 'sometimes',
+			'threat_p_2'    			=> 'sometimes',
+			'threat_p_3'    			=> 'sometimes',
+			'threat_p_4'    			=> 'sometimes',
+			'threat_p_5'    			=> 'sometimes',
+			'threat_p_6'    			=> 'sometimes',
+			'threat_p_7'    			=> 'sometimes',
+			'threat_p_8'    			=> 'sometimes',
+			'cost_p_1'    				=> 'sometimes',
+			'cost_p_2'    				=> 'sometimes',
+			'cost_p_3'    				=> 'sometimes',
+			'cost_p_4'    				=> 'sometimes',
+			'cost_p_5'    				=> 'sometimes',
+			'example_title'    			=> 'sometimes',
+			'example_p_1'    			=> 'sometimes',
+			'example_p_2'    			=> 'sometimes',
+			'example_p_3'    			=> 'sometimes',
+			'example_p_4'    			=> 'sometimes',
+			'reco_title'    			=> 'sometimes',
+			'reco_p_1'    				=> 'sometimes',
+			'reco_p_2'    				=> 'sometimes',
+			'reco_p_3'    				=> 'sometimes',
+			'reco_p_4'    				=> 'sometimes',
+			'reco_p_5'    				=> 'sometimes',
+			'reco_p_6'    				=> 'sometimes',
+			'marine_modal'    			=> 'sometimes',
+			'waste_modal'    			=> 'sometimes',
+			'partial_modal'    			=> 'sometimes',
 		]);
 
 		if ($validator->fails()) {
 			return response([
 				'errors' => $validator->errors()->all()
 			], 400);
+		}
+
+		$content_fields = (object) [
+			'header_title'				=> $r->header_title,
+			'dropdown_label' 			=> $r->dropdown_label,
+			'download' 					=> $r->download,
+			'infographics_title' 		=> $r->infographics_title,
+			'cultivation' 				=> $r->cultivation,
+			'curing' 					=> $r->curing,
+			'process_manufacturing' 	=> $r->process_manufacturing,
+			'distribution' 				=> $r->distribution,
+			'use' 						=> $r->use,
+			'disposal' 					=> $r->disposal,
+			'waste_management' 			=> $r->waste_management,
+			'marine_pollution' 			=> $r->marine_pollution,
+			'billion' 					=> $r->billion,
+			'million' 					=> $r->million,
+			'trillion' 					=> $r->trillion,
+			'in_usd' 					=> $r->in_usd,
+			'cost' 						=> $r->cost,
+			'cigarettes_consumed' 		=> $r->cigarettes_consumed,
+			'waste_management_costs' 	=> $r->waste_management_costs,
+			'consuming' 				=> $r->consuming,
+			'sticks_of_cigarettes' 		=> $r->sticks_of_cigarettes,
+			'produced_mainly' 			=> $r->produced_mainly,
+			'references' 				=> $r->references,
+			'show_less' 				=> $r->show_less,
+			'show_more' 				=> $r->show_more,
+			'threat_title' 				=> $r->threat_title,
+			'threat_p_1' 				=> $r->threat_p_1,
+			'threat_p_2' 				=> $r->threat_p_2,
+			'threat_p_3' 				=> $r->threat_p_3,
+			'threat_p_4' 				=> $r->threat_p_4,
+			'threat_p_5' 				=> $r->threat_p_5,
+			'threat_p_6' 				=> $r->threat_p_6,
+			'threat_p_7' 				=> $r->threat_p_7,
+			'threat_p_8' 				=> $r->threat_p_8,
+			'cost_p_1' 					=> $r->cost_p_1,
+			'cost_p_2' 					=> $r->cost_p_2,
+			'cost_p_3' 					=> $r->cost_p_3,
+			'cost_p_4' 					=> $r->cost_p_4,
+			'cost_p_5' 					=> $r->cost_p_5,
+			'example_title' 			=> $r->example_title,
+			'example_p_1' 				=> $r->example_p_1,
+			'example_p_2' 				=> $r->example_p_2,
+			'example_p_3' 				=> $r->example_p_3,
+			'example_p_4' 				=> $r->example_p_4,
+			'reco_title' 				=> $r->reco_title,
+			'reco_p_1' 					=> $r->reco_p_1,
+			'reco_p_2' 					=> $r->reco_p_2,
+			'reco_p_3' 					=> $r->reco_p_3,
+			'reco_p_4' 					=> $r->reco_p_4,
+			'reco_p_5' 					=> $r->reco_p_5,
+			'reco_p_6' 					=> $r->reco_p_6,
+			'marine_modal' 				=> $r->marine_modal,
+			'waste_modal' 				=> $r->waste_modal,
+			'partial_modal' 			=> $r->partial_modal,
+		];
+
+		$static_translations = StaticTranslation::where('language_id', $r->language_id)->first();
+
+		if (!$static_translations) {
+			$static_translation = StaticTranslation::create([
+				'language_id' 		=> $r->language_id,
+				'content_fields'	=> json_encode($content_fields)
+			]);
+
+			$static_translation->load('language');
+
+			return response([
+				'res' => $static_translation
+			]);
+		}
+		else{
+			return response([
+				'errors' => ['Static Language Translation already exists.']
+			]);
 		}
 	}
 }
