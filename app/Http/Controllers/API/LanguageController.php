@@ -61,7 +61,7 @@ class LanguageController extends Controller
 		else {
 			return response([
 				'errors' => ['Language not found.']
-			]);
+			], 400);
 		}
 	}
 	
@@ -95,7 +95,7 @@ class LanguageController extends Controller
 		else{
 			return response([
 				'errors' => ['Language not found.']
-			]);
+			], 400);
 		}
 	}
 
@@ -112,7 +112,7 @@ class LanguageController extends Controller
 		else {
 			return response([
 				'errors' => ['Language not found.']
-			]);
+			], 400);
 		}
 	}
 

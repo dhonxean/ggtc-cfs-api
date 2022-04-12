@@ -176,7 +176,7 @@ class CountryController extends Controller
 		else {
 			return response([
 				'errors' => ['Country not found.']
-			]);
+			], 400);
 		}
 	}
 
@@ -185,7 +185,10 @@ class CountryController extends Controller
 			'name' 			  			=> 'required',
 			'country_code'    			=> [
 											'required',
-											Rule::unique('countries', 'iso2')->ignore($id)
+											Rule::unique('countries', 'iso2')
+											->where(function ($query) {
+												return $query->where('deleted_at', NULL);
+											})->ignore($id)
 										],
 			'country_code_2'  			=> 'sometimes',
 			// 'flag'  		  			=> 'required',
@@ -302,7 +305,7 @@ class CountryController extends Controller
 		else {
 			return response([
 				'errors' => ['Country not found!']
-			]);
+			], 400);
 		}
 	}
 
@@ -319,7 +322,7 @@ class CountryController extends Controller
 		else{
 			return response([
 				'errors' => ['Country not found!']
-			]);
+			], 400);
 		}
 	}
 

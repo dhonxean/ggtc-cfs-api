@@ -57,7 +57,7 @@ class ImportController extends Controller
 			default:
 				return response([
 					'errors' => ['Unknown import template!']
-				]);
+				], 400);
 				break;
 		}
 	}

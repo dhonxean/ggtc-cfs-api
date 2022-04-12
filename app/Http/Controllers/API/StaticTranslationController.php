@@ -51,7 +51,7 @@ class StaticTranslationController extends Controller
 		// 	"show_more": "SHOW MORE",
 		// 	"threat_title": "Tobacco: Threat to the Environment",
 		// 	"threat_p_1": "Throughout its lifecycle, tobacco has a negative environmental impact:",
-		// 	"threat_p_2": "Clearing lands and burning plant residues lead to <b>deforestation</b>, while agrochemicals /pesticides pollute waterways and poison fishes</div>",
+		// 	"threat_p_2": "Clearing lands and burning plant residues lead to <b>deforestation</b>, while agrochemicals /pesticides pollute waterways and poison fishes",
 		// 	"threat_p_3": "Burning firewood to cure leaves causes <b>deforestation and water scarcity</b>",
 		// 	"threat_p_4": "Processes involve use of toxic chemicals, and emission of greenhouse gases &amp; other waste",
 		// 	"threat_p_5": "Greenhouse gases are emitted during transport",
@@ -62,7 +62,6 @@ class StaticTranslationController extends Controller
 		// 	"cost_p_2": "This reflects some of the environmental costs under “ Disposal.” This does NOT INCLUDE costs of deforestation and greenhouse gas emissions during “Production & Distribution; ” toxic air pollution during “Use,” accidental fires and other waste during “Disposal”",
 		// 	"cost_p_3": "Added to environmental harms are",
 		// 	"cost_p_4": "<span> Cigarettes Consumed</span> each year in <span>economic losses</span> from",
-		// 	"cost_p_5": "produced mainly by",
 		// 	"example_title": "Tobacco Industry’s So-Called CSR",
 		// 	"example_p_1": "Cigarette is the only consumer product that, if used as intended, kills half of its consumers. Tobacco kills 8 million people annually, far more than weapons and natural disasters, combined. And the tobacco industry is known to obscure the harms it causes through so-called corporate social responsibility activities (CSR) to divert attention from tobacco’s devastating impact. Tobacco companies’ activities tend to shift the blame of environmental harm to consumers and drown out voices of farmers and workers impacted by environmental and health harms.",
 		// 	"example_p_2": "According to the WHO Framework Convention on Tobacco Control, <b>the tobacco industry must be prohibited from promoting its so-called CSR activities. Governments must not give the tobacco industry a seat at the table.</b> Over 60 governments specifically ban sponsorship activities of the tobacco industry.",
@@ -93,15 +92,15 @@ class StaticTranslationController extends Controller
 
 		// uncomment this is importing all the languages with the default content 
 
-		// foreach ($languages as $key => $item) {
-		// 	$check_translation = StaticTranslation::where('language_id', $item->id)->first();
-		// 	if (!$check_translation) {
-		// 		StaticTranslation::create([
-		// 			'language_id' 		=> $item->id,
-		// 			'content_fields'	=> $r->content
-		// 		]);
-		// 	}
-		// }
+		foreach ($languages as $key => $item) {
+			$check_translation = StaticTranslation::where('language_id', $item->id)->first();
+			if (!$check_translation) {
+				StaticTranslation::create([
+					'language_id' 		=> $item->id,
+					'content_fields'	=> $r->content
+				]);
+			}
+		}
 	}
 
 	public function getAvailableLanguage() {
@@ -154,7 +153,6 @@ class StaticTranslationController extends Controller
 			'cost_p_2'    				=> 'sometimes',
 			'cost_p_3'    				=> 'sometimes',
 			'cost_p_4'    				=> 'sometimes',
-			'cost_p_5'    				=> 'sometimes',
 			'example_title'    			=> 'sometimes',
 			'example_p_1'    			=> 'sometimes',
 			'example_p_2'    			=> 'sometimes',
@@ -217,7 +215,6 @@ class StaticTranslationController extends Controller
 			'cost_p_2' 					=> $r->cost_p_2,
 			'cost_p_3' 					=> $r->cost_p_3,
 			'cost_p_4' 					=> $r->cost_p_4,
-			'cost_p_5' 					=> $r->cost_p_5,
 			'example_title' 			=> $r->example_title,
 			'example_p_1' 				=> $r->example_p_1,
 			'example_p_2' 				=> $r->example_p_2,
@@ -256,12 +253,27 @@ class StaticTranslationController extends Controller
 		}
 	}
 
-	public function info ($id) {
-		$static_translation = StaticTranslation::where('id', $id)->first();
+	public function info ($id, Request $r) {
+		if (isset($r->type)) {
+			$static_translation = Language::where('id', $id)
+								->with('static_translation')
+								->first();
+		}
+		else {
+			$static_translation = StaticTranslation::where('id', $id)->first();
+		}
 
 		if ($static_translation) {
-			$content_fields = json_decode($static_translation->content_fields);
-			$static_translation->content_fields = $content_fields;
+			if (isset($r->type)) {
+				if ($static_translation->static_translation != null) {
+					$content_fields = json_decode($static_translation->static_translation->content_fields);
+					$static_translation->static_translation->content_fields = $content_fields;
+				}
+			}
+			else {
+				$content_fields = json_decode($static_translation->content_fields);
+				$static_translation->content_fields = $content_fields;
+			}
 			return response([
 				'res' => $static_translation
 			]);
@@ -269,7 +281,7 @@ class StaticTranslationController extends Controller
 		else {
 			return response([
 				'errors' => ['Translation not found!']
-			]);
+			], 404);
 		}
 	}
 
@@ -317,7 +329,6 @@ class StaticTranslationController extends Controller
 			'cost_p_2'    				=> 'sometimes',
 			'cost_p_3'    				=> 'sometimes',
 			'cost_p_4'    				=> 'sometimes',
-			'cost_p_5'    				=> 'sometimes',
 			'example_title'    			=> 'sometimes',
 			'example_p_1'    			=> 'sometimes',
 			'example_p_2'    			=> 'sometimes',
@@ -380,7 +391,6 @@ class StaticTranslationController extends Controller
 			'cost_p_2' 					=> $r->cost_p_2,
 			'cost_p_3' 					=> $r->cost_p_3,
 			'cost_p_4' 					=> $r->cost_p_4,
-			'cost_p_5' 					=> $r->cost_p_5,
 			'example_title' 			=> $r->example_title,
 			'example_p_1' 				=> $r->example_p_1,
 			'example_p_2' 				=> $r->example_p_2,
@@ -415,7 +425,7 @@ class StaticTranslationController extends Controller
 		else {
 			return response([
 				'errors' => ['Translation not found!']
-			]);
+			], 400);
 		}
 	}
 
@@ -432,7 +442,7 @@ class StaticTranslationController extends Controller
 		else {
 			return response([
 				'errors' => ['Translation not found!']
-			]);
+			], 400);
 		}
 	}
 

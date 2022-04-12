@@ -55,7 +55,7 @@ class CompanyController extends Controller
 		else {
 			return response([
 				'errors' => ['Company not found!']
-			]);
+			], 400);
 		}
 	}
 
@@ -87,7 +87,7 @@ class CompanyController extends Controller
 		else {
 			return response([
 				'errors' => ['Company not found!']
-			]);
+			], 400);
 		}
 	}
 
@@ -104,7 +104,7 @@ class CompanyController extends Controller
 		else {
 			return response([
 				'errors' => ['Company not found!']
-			]);
+			], 400);
 		}
 	}
 

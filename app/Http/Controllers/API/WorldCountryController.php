@@ -75,7 +75,7 @@ class WorldCountryController extends Controller
 		else {
 			return response([
 				'errors' => ['Country not found.']
-			]);
+			], 400);
 		}
 	}
 
@@ -115,7 +115,7 @@ class WorldCountryController extends Controller
 		else {
 			return response([
 				'errors' => ['Country not found.']
-			]);
+			], 400);
 		}
 
 	}
@@ -133,7 +133,7 @@ class WorldCountryController extends Controller
 		else {
 			return response([
 				'errors' => ['Country not found.']
-			]);
+			], 400);
 		}
 	}
 

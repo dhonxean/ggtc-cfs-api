@@ -38,7 +38,7 @@ class CurrencyRateController extends Controller
 		else {
 			return response([
 				'errors' => ['Currency code not found.']
-			]);
+			], 400);
 		}
 	}
 }

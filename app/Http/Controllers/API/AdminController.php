@@ -171,7 +171,7 @@ class AdminController extends Controller
 		else {
 			return response([
 				'errors' => ['User not found.']
-			]);
+			], 400);
 		}
 	}
 }
