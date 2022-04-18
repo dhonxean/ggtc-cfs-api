@@ -66,8 +66,12 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::group(['prefix' => 'currency-rate'], function () {
 			Route::controller(CurrencyRateController::class)->group(function () {
 				Route::middleware('auth.admin')->group( function () {
-					Route::get('test', 'test');
-					Route::get('get-currency', 'getCurrency');
+					Route::post('/create', 'create');
+					Route::get('/info/{id}', 'info');
+					Route::post('/update/{id}', 'update');
+					Route::delete('/delete/{id}', 'delete');
+					Route::get('import-default-currency', 'importDefaultCurrency');
+					Route::post('get-all-currency', 'getAllCurrency');
 				});
 			});
 		});

@@ -17,6 +17,7 @@ use App\Models\{
 	CountryCompany,
 	CountryReference,
 	CountryMetadata,
+	CurrencyRate,
 };
 
 class CountryController extends Controller
@@ -30,12 +31,15 @@ class CountryController extends Controller
 		foreach ($r->request as $key => $value) {
 			$country = Country::where('iso2', $value['iso2'])->first();
 			if (!$country) {
+
+				$currencyRate = CurrencyRate::where('name', $value['currency'])->first();
+
 				Country::create([
 					'name' => $value['name'],
 					'iso2' => $value['iso2'],
 					'iso3' => $value['iso3'],
 					'flag' => $value['emoji'],
-					'currency' => $value['currency'],
+					'currency' => $currencyRate != null ? $currencyRate->id : null,
 					'currency_symbol' => $value['currency_symbol'],
 					'region' => $value['region'],
 					'publish' => 0,
@@ -164,7 +168,8 @@ class CountryController extends Controller
 					'cost_estimation', 
 					'references', 
 					'companies', 
-					'meta_data'
+					'meta_data',
+					'currency_rate'
 				])
 				->first();
 
@@ -330,6 +335,7 @@ class CountryController extends Controller
 		$country = Country::when(isset($r->keyword), function ($query) use ($r) {
 					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%');	
 				})
+				->with('currency_rate')
 				->when(isset($r->sort_by), function ($query) use ($r) {
 					if ($r->order_type == 'desc') {
 						$query->orderByDesc($r->sort_by);
@@ -358,6 +364,7 @@ class CountryController extends Controller
 		$resultData['country'] = Country::when(isset($r->keyword), function ($query) use ($r) {
 					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%');	
 				})
+				->with('currency_rate')
 				->when(isset($r->sort_by), function ($query) use ($r) {
 					if ($r->order_type == 'desc') {
 						$query->orderByDesc($r->sort_by);
