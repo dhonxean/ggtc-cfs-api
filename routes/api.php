@@ -11,6 +11,7 @@ use App\Http\Controllers\API\{
 	LanguageController,
 	WorldCountryController,
 	StaticTranslationController,
+	DynamicTranslationController,
 };
 
 /*
@@ -90,7 +91,7 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::group(['prefix' => 'web'], function () {
 		Route::group(['prefix' => 'country'], function () {
 			Route::controller(CountryController::class)->group(function () {
-				Route::get('get-all-country', 'allCountry');
+				Route::post('get-all-country', 'allCountry');
 				Route::post('generate-image-pdf', 'generate');
 			});
 		});
@@ -139,6 +140,19 @@ Route::group(['prefix' => 'v2'], function () {
 					Route::post('/update/{id}', 'update');
 					Route::delete('/delete/{id}', 'delete');
 					Route::post('/get-all-static-translation', 'getAllStaticTranslation');
+				});
+			});
+		});
+
+
+		// dynamic translation
+		Route::group(['prefix' => 'dynamic-translation'], function () {
+			Route::controller(DynamicTranslationController::class)->group(function () {
+				Route::middleware('auth.admin')->group( function () {
+					Route::post('/create', 'create');
+					Route::get('/info/{id}', 'info');
+					Route::post('/update/{id}', 'update');
+					Route::delete('/delete/{id}', 'delete');
 				});
 			});
 		});

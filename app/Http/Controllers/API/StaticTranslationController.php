@@ -92,15 +92,15 @@ class StaticTranslationController extends Controller
 
 		// uncomment this is importing all the languages with the default content 
 
-		foreach ($languages as $key => $item) {
-			$check_translation = StaticTranslation::where('language_id', $item->id)->first();
-			if (!$check_translation) {
-				StaticTranslation::create([
-					'language_id' 		=> $item->id,
-					'content_fields'	=> $r->content
-				]);
-			}
-		}
+		// foreach ($languages as $key => $item) {
+		// 	$check_translation = StaticTranslation::where('language_id', $item->id)->first();
+		// 	if (!$check_translation) {
+		// 		StaticTranslation::create([
+		// 			'language_id' 		=> $item->id,
+		// 			'content_fields'	=> $r->content
+		// 		]);
+		// 	}
+		// }
 	}
 
 	public function getAvailableLanguage() {

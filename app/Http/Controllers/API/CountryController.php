@@ -18,6 +18,7 @@ use App\Models\{
 	CountryReference,
 	CountryMetadata,
 	CurrencyRate,
+	WorldCountry,
 };
 
 class CountryController extends Controller
@@ -375,6 +376,15 @@ class CountryController extends Controller
 				})
 				->where('publish', 1)
 				->get();
+
+		// return language translation and select users countries language
+		if ($r->user_country_code) {
+			// $countries = WorldCountry::where('country_code', $r->user_country_code)
+			// 			->with('language')
+			// 			->first();
+
+			// $resultData['languages'] = $countries;
+		}
 
 		$resultData['selected_country'] = Country::when(isset($r->selected_country), function ($query) use ($r) {
 			$query->where('iso2', $r->selected_country);
