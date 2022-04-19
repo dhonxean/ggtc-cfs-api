@@ -38,6 +38,13 @@ class DynamicTranslationController extends Controller
 			], 400);
 		}
 
+		$country = Country::where('id', $r->country_id)->first();
+		if (!$country) {
+			return response([
+				'errors' => ['Country not found']
+			]);
+		}
+
 		$translations = DynamicTranslation::where([
 							'country_id' => $r->country_id,
 							'language_id' => $r->language_id,
@@ -141,4 +148,44 @@ class DynamicTranslationController extends Controller
 		}
 	}
 
+	public function getCountryDynamicTranslation(Request $r) {
+		$dynamic_translation = DynamicTranslation::select('dynamic_translations.id', 'dynamic_translations.country_id', 'dynamic_translations.language_id', 'lang.name as language_name', 'dynamic_translations.created_at')
+				->when(isset($r->keyword), function ($query) use ($r) {
+					$query->whereHas('language', function ($q) use ($r) {
+						$q->where('lang.name', 'LIKE', '%'.strtolower($r->keyword).'%');
+					});
+				})
+				->join('languages as lang', 'lang.id', '=', 'dynamic_translations.language_id')
+				->with('country')
+				->when(isset($r->country_id), function ($query) use ($r) {
+					$query->where('country_id', $r->country_id);
+				})
+				->when(isset($r->sort_by), function ($query) use ($r) {
+					if ($r->sort_by == 'language_id') {
+						if ($r->order_type == 'desc') {
+							$query->orderByDesc('lang.name');
+						}
+						else {
+							$query->orderBy('lang.name');
+						}
+					}
+					else {
+						if ($r->order_type == 'desc') {
+							$query->orderByDesc('dynamic_translations.'.$r->sort_by);
+						}
+						else {
+							$query->orderBy('dynamic_translations.'.$r->sort_by);
+						}
+					}
+				})
+				->when( $r->filled('all') , function ($q, $r) {
+					return $q->get();
+				}, function ($q) {
+					return $q->paginate(20);
+				});
+
+		return response([
+			'res' => $dynamic_translation
+		]);
+	}
 }

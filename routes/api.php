@@ -153,6 +153,7 @@ Route::group(['prefix' => 'v2'], function () {
 					Route::get('/info/{id}', 'info');
 					Route::post('/update/{id}', 'update');
 					Route::delete('/delete/{id}', 'delete');
+					Route::post('/get-country-dynamic-translation', 'getCountryDynamicTranslation');
 				});
 			});
 		});

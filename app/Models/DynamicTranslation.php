@@ -18,4 +18,8 @@ class DynamicTranslation extends Model
     public function language() {
         return $this->hasOne(Language::class, 'id', 'language_id');
     }
+
+    public function country() {
+        return $this->hasOne(Country::class, 'id', 'country_id');
+    }
 }
