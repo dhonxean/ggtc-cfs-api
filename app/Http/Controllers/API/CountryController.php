@@ -19,6 +19,9 @@ use App\Models\{
 	CountryMetadata,
 	CurrencyRate,
 	WorldCountry,
+	DynamicTranslation,
+	Language,
+	StaticTranslation,
 };
 
 class CountryController extends Controller
@@ -377,15 +380,7 @@ class CountryController extends Controller
 				->where('publish', 1)
 				->get();
 
-		// return language translation and select users countries language
-		if ($r->user_country_code) {
-			// $countries = WorldCountry::where('country_code', $r->user_country_code)
-			// 			->with('language')
-			// 			->first();
-
-			// $resultData['languages'] = $countries;
-		}
-
+				
 		$resultData['selected_country'] = Country::when(isset($r->selected_country), function ($query) use ($r) {
 			$query->where('iso2', $r->selected_country);
 		})
@@ -396,10 +391,43 @@ class CountryController extends Controller
 			'companies', 
 			'meta_data',
 			'currency_rate'
-		])
+			])
 		->where('publish', 1)
 		->first();
-		
+					
+		// populate available dynamic translation for specific country
+		$translations = DynamicTranslation::where('country_id', $resultData['selected_country']->id)
+							->with([
+								'language' => function ($q) use($r) {
+									$q->with([
+										'static_translation', 
+									]);
+								}
+							])	
+							->get();
+		foreach($translations as $key => $item) {
+			if ($item->language->static_translation != null) {
+				$item->language->static_translation->content_fields = json_decode($item->language->static_translation->content_fields);
+			}
+		}
+
+		$resultData['translations'] = $translations;
+							
+		// select language of the user based on the country code of location
+		$resultData['selected_translation'] = null;
+		if ($r->user_country_code) {
+			$user_country = WorldCountry::where('country_code', $r->user_country_code)->first();
+
+			if ($user_country) {
+				$resultData['selected_translation'] = DynamicTranslation::where([
+												'country_id' 	=> $resultData['selected_country']->id,
+												'language_id'	=> $user_country->language_id
+											])->first();
+			}
+		}
+
+		$resultData['user_country_code'] = $r->user_country_code;
+
 		return response([
 			'res' => $resultData
 		]);

@@ -18,4 +18,8 @@ class Language extends Model
     public function static_translation() {
         return $this->hasOne(StaticTranslation::class, 'language_id', 'id');
     }
+
+    public function world_countries() {
+        return $this->hasMany(WorldCountry::class, 'language_id', 'id');
+    }
 }
