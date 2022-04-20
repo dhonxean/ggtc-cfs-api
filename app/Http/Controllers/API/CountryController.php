@@ -22,6 +22,7 @@ use App\Models\{
 	DynamicTranslation,
 	Language,
 	StaticTranslation,
+	Image,
 };
 
 class CountryController extends Controller
@@ -401,6 +402,7 @@ class CountryController extends Controller
 								'language' => function ($q) use($r) {
 									$q->with([
 										'static_translation', 
+										'images'
 									]);
 								}
 							])	

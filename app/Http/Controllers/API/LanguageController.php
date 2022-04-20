@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Traits\MainTraits;
 use App\Models\{
 	Language,
+	Image,
 };
 
 class LanguageController extends Controller
 {
+	use MainTraits;
 	/**
 	 ** ###[ CMS APIs ]###########################
 	**
@@ -30,8 +33,9 @@ class LanguageController extends Controller
 
 	public function create(Request $r) {
 		$validator = \Validator::make($r->all(), [
-			'name' 	=> 'required',
-			'code'	=> 'required|unique:languages',
+			'name' 		=> 'required',
+			'code'		=> 'required|unique:languages',
+			'images.*'  => 'sometimes|mimes:jpeg,png,jpg|max:5000' //in kilobytes = 5mb max
 		]);
 
 		if ($validator->fails()) {
@@ -45,13 +49,21 @@ class LanguageController extends Controller
 			'code'	=> $r->code,
 		]);
 
+		/**
+		 * add image uploads  */
+		if( $r->hasFile('flag') ){
+			$this->addImages('language', $r, $language, 'flag');
+		}
+
+		$language->load('images');
+
 		return response([
 			'res' => $language
 		]);
 	}
 
 	public function info($id) {
-		$language = Language::where('id', $id)->first();
+		$language = Language::where('id', $id)->with('images')->first();
 
 		if ($language) {
 			return response([
@@ -72,6 +84,7 @@ class LanguageController extends Controller
 				'required',
 				Rule::unique('languages')->ignore($id)
 			],
+			'images.*'  => 'sometimes|mimes:jpeg,png,jpg|max:5000' //in kilobytes = 5mb max
 		]);
 
 		if ($validator->fails()) {
@@ -87,7 +100,13 @@ class LanguageController extends Controller
 				'name'	=> $r->name,
 				'code'	=> $r->code,
 			]);
+			
+			/**
+			 * add image uploads  */
+			$this->updateImages('language', $r, $language, 'flag');
 
+			$language->load('images');
+			
 			return response([
 				'res' => $language
 			]);
