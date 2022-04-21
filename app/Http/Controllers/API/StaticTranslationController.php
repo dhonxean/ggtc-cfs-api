@@ -27,7 +27,7 @@ class StaticTranslationController extends Controller
 		// 	"header_title": "Customized Fact Sheet",
 		// 	"dropdown_label": "Choose a Country",
 		// 	"download": "Download",
-		// 	"infographics_title": "The estimated cost of tobacco product waste that accumulates in",
+		// 	"infographics_title": "The estimated cost of tobacco product waste that accumulates in the",
 		// 	"cultivation": "Cultivation",
 		// 	"curing": "Curing",
 		// 	"process_manufacturing": "Process & Manufacturing",
