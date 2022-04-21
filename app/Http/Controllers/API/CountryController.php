@@ -448,11 +448,19 @@ class CountryController extends Controller
 			'dpi' => 150
 		]);
 
+		$image_url = 'uploads/image-reports';
+		$pdf_url = 'uploads/pdf-reports';
+
+		if ($r->languageCode) {
+			$image_url = "uploads/translations/image-reports/$r->languageCode";
+			$pdf_url = "uploads/translations/pdf-reports/$r->languageCode";
+		}
+
 		$filename = "Customized Fact Sheet - $countryCode.pdf";
 
-		Storage::disk('public')->put("uploads/pdf-reports/$filename", $pdf->output());
+		Storage::disk('public')->put("$pdf_url/$filename", $pdf->output());
 
-		$url = url('/') . "/storage/uploads/pdf-reports/$filename";
+		$url = url('/') . "/storage/$pdf_url/$filename";
 
 		/* generate and save image to storage */
 		$image_64 = $r->image;
@@ -462,8 +470,9 @@ class CountryController extends Controller
 		$image = str_replace(' ', '+', $image); 
 		$imageName = "Customized_Fact_Sheet_-_$countryCode.$extension";
 
-		Storage::disk('public')->put("uploads/image-reports/$imageName", base64_decode($image));
+		Storage::disk('public')->put("$image_url/$imageName", base64_decode($image));
 		/* end */
+
 
 		return response([
 			'download_url' => $url
