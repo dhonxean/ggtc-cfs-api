@@ -12,6 +12,7 @@ use App\Models\{
 	CountryReference,
 	CountryMetadata,
 	Company,
+	CurrencyRate,
 };
 use App\Traits\MainTraits;
 
@@ -46,8 +47,8 @@ class CountryImport implements ToCollection
 					$region = $row[4];
 					$csr_local_examples = $row[5];
 					$csr_policy = $row[6];
-					$acknowledgement = $row[7];
-					$companies = $row[8] != '' ? explode(',', $row[8]) : [];
+					$companies = $row[7] != '' ? explode(',', $row[7]) : [];
+					$acknowledgement = $row[8];
 					$death = $row[9];
 					$cigarettes_consumed = $row[10];
 					$cigarettes_consumed_unit = $row[11];
@@ -65,10 +66,24 @@ class CountryImport implements ToCollection
 					
 					# insert country
 					if (!$country) {
+						$check_currency = CurrencyRate::where('name', $currency)->first();
+						$currency_id = 0;
+						if ($check_currency) {
+							$currency_id = $check_currency->id;
+						}
+						else {
+							$create_currency = CurrencyRate::create([
+								'name' 		=> $currency,
+								'amount'	=> 1,
+							]);
+
+							$currency_id = $create_currency->id;
+						}
+
 						$country_id = Country::create([
 							'name' 				=> $name,
 							'iso2'				=> $iso2,
-							'currency'			=> $currency,
+							'currency'			=> $currency_id,
 							'currency_symbol'	=> $currency_symbol,
 							'region'			=> isset($region) ? ($region != null && $region != '' ? $region : '') : '',
 							'publish'			=> 0,
