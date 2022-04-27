@@ -16,14 +16,14 @@ class CreateCostEstimationsTable extends Migration
         Schema::create('cost_estimations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
-            $table->decimal('marine_pollution', $precision = 20, $scale = 2)->nullable();
-            $table->decimal('waste_management', $precision = 20, $scale = 2)->nullable();
-            $table->decimal('partial_cost', $precision = 20, $scale = 2)->nullable();
-            $table->decimal('marine_cost_per_ton', $precision = 20, $scale = 2)->nullable();
-            $table->decimal('waste_cost_per_ton', $precision = 20, $scale = 2)->nullable();
+            $table->string('marine_pollution')->nullable();
+            $table->string('waste_management')->nullable();
+            $table->string('partial_cost')->nullable();
+            $table->string('marine_cost_per_ton')->nullable();
+            $table->string('waste_cost_per_ton')->nullable();
             $table->bigInteger('cigarettes_consumed')->nullable();
             $table->string('cigarettes_consumed_unit')->nullable();
-            $table->decimal('economic_cost', $precision = 20, $scale = 2)->nullable();
+            $table->string('economic_cost')->nullable();
             $table->string('economic_cost_currency')->nullable();
             $table->string('cigarettes_sticks')->nullable();
             $table->timestamps();

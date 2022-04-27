@@ -61,19 +61,19 @@ class CountryController extends Controller
 			// country details
 			'death' 					=> 'required',
 			'csr_local_examples' 		=> 'required',
-			'csr_policy' 				=> 'required',
-			'acknowledgement' 			=> 'required',
+			'csr_policy' 				=> 'sometimes',
+			'acknowledgement' 			=> 'sometimes',
 			// cost estimations
 			'marine_pollution' 			=> 'required',
 			'waste_management' 			=> 'required',
 			'partial_cost' 				=> 'required',
-			'marine_cost_per_ton' 		=> 'required',
-			'waste_cost_per_ton' 		=> 'required',
+			'marine_cost_per_ton' 		=> 'sometimes',
+			'waste_cost_per_ton' 		=> 'sometimes',
 			'cigarettes_consumed' 		=> 'required',
-			'cigarettes_consumed_unit' 	=> 'required',
+			'cigarettes_consumed_unit' 	=> 'sometimes',
 			'economic_cost' 			=> 'required',
-			'economic_cost_currency' 	=> 'required',
-			'cigarettes_sticks' 		=> 'required',
+			'economic_cost_currency' 	=> 'sometimes',
+			'cigarettes_sticks' 		=> 'sometimes',
 			// references
 			'reference'					=> 'sometimes|array',
 			'reference_sequence'		=> 'sometimes|array',
@@ -107,7 +107,7 @@ class CountryController extends Controller
 		CountryMetadata::create([
 			'country_id'		=> $country->id,
 			'meta_title'		=> isset($r->meta_title) ? $r->meta_title : $r->name,
-			'meta_description'		=> isset($r->meta_description) ? $r->meta_description : $r->csr_policy,
+			'meta_description'	=> isset($r->meta_description) ? $r->meta_description : $r->csr_policy,
 		]);
 
 		CountryDetail::create([
@@ -126,10 +126,10 @@ class CountryController extends Controller
 			'marine_cost_per_ton'		=> $r->marine_cost_per_ton,
 			'waste_cost_per_ton'		=> $r->waste_cost_per_ton,
 			'cigarettes_consumed'		=> $r->cigarettes_consumed,
-			'cigarettes_consumed_unit'		=> $r->cigarettes_consumed_unit,
+			'cigarettes_consumed_unit'	=> $r->cigarettes_consumed_unit,
 			'economic_cost'				=> $r->economic_cost,
 			'economic_cost_currency'	=> $r->economic_cost_currency,
-			'cigarettes_sticks'	=> $r->cigarettes_sticks,
+			'cigarettes_sticks'			=> $r->cigarettes_sticks,
 		]);
 
 		if (!empty($r->reference)) {
@@ -201,19 +201,19 @@ class CountryController extends Controller
 			// country details
 			'death' 					=> 'required',
 			'csr_local_examples' 		=> 'required',
-			'csr_policy' 				=> 'required',
-			'acknowledgement' 			=> 'required',
+			'csr_policy' 				=> 'sometimes',
+			'acknowledgement' 			=> 'sometimes',
 			// cost estimations
 			'marine_pollution' 			=> 'required',
 			'waste_management' 			=> 'required',
 			'partial_cost' 				=> 'required',
-			'marine_cost_per_ton' 		=> 'required',
-			'waste_cost_per_ton' 		=> 'required',
+			'marine_cost_per_ton' 		=> 'sometimes',
+			'waste_cost_per_ton' 		=> 'sometimes',
 			'cigarettes_consumed' 		=> 'required',
-			'cigarettes_consumed_unit' 	=> 'required',
+			'cigarettes_consumed_unit' 	=> 'sometimes',
 			'economic_cost' 			=> 'required',
-			'economic_cost_currency' 	=> 'required',
-			'cigarettes_sticks' 		=> 'required',
+			'economic_cost_currency' 	=> 'sometimes',
+			'cigarettes_sticks' 		=> 'sometimes',
 			// references
 			'reference'					=> 'sometimes|array',
 			'reference_sequence'		=> 'sometimes|array',
