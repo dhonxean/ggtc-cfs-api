@@ -276,8 +276,8 @@ class CountryController extends Controller
 				'cigarettes_sticks'			=> $r->cigarettes_sticks,
 			]);
 	
+			$country->references()->delete();
 			if (!empty($r->reference)) {
-				$country->references()->delete();
 				foreach ($r->reference as $key => $item) {
 					CountryReference::create([
 						'country_id' 	=> $country->id,
