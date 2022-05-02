@@ -21,7 +21,7 @@ class CreateCostEstimationsTable extends Migration
             $table->string('partial_cost')->nullable();
             $table->string('marine_cost_per_ton')->nullable();
             $table->string('waste_cost_per_ton')->nullable();
-            $table->bigInteger('cigarettes_consumed')->nullable();
+            $table->string('cigarettes_consumed')->nullable();
             $table->string('cigarettes_consumed_unit')->nullable();
             $table->string('economic_cost')->nullable();
             $table->string('economic_cost_currency')->nullable();

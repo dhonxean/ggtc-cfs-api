@@ -68,8 +68,10 @@ class CountryImport implements ToCollection
 					if (!$country) {
 						$check_currency = CurrencyRate::where('name', $currency)->first();
 						$currency_id = 0;
+						$currency_rate = 1;
 						if ($check_currency) {
 							$currency_id = $check_currency->id;
+							$currency_rate = $check_currency->amount;
 						}
 						else {
 							$create_currency = CurrencyRate::create([
@@ -78,6 +80,7 @@ class CountryImport implements ToCollection
 							]);
 
 							$currency_id = $create_currency->id;
+							$currency_rate = $create_currency->amount;
 						}
 
 						$country_id = Country::create([
@@ -104,17 +107,21 @@ class CountryImport implements ToCollection
 							'csr_policy'			=> $csr_policy,
 							'acknowledgement'		=> $acknowledgement,
 						]);
+
+						$computed_marine_pollution = $marine_pollution != null && $marine_pollution != "" ? $marine_pollution / $currency_rate : $marine_pollution;
+						$computed_waste_management = $waste_management != null && $waste_management != "" ? $waste_management / $currency_rate : $waste_management;
+						$computed_economic_cost = $economic_cost != null && $economic_cost != "" ? $economic_cost / $currency_rate : $economic_cost;
 				
 						CostEstimation::create([
 							'country_id'				=> $country->id,
-							'marine_pollution'			=> $marine_pollution,
-							'waste_management'			=> $waste_management,
+							'marine_pollution'			=> $computed_marine_pollution,
+							'waste_management'			=> $computed_waste_management,
 							'partial_cost'				=> $partial_cost,
 							'marine_cost_per_ton'		=> $marine_cost_per_ton,
 							'waste_cost_per_ton'		=> $waste_cost_per_ton,
 							'cigarettes_consumed'		=> $cigarettes_consumed,
 							'cigarettes_consumed_unit'	=> $cigarettes_consumed_unit,
-							'economic_cost'				=> $economic_cost,
+							'economic_cost'				=> $computed_economic_cost,
 							'economic_cost_currency'	=> $economic_cost_currency,
 							'cigarettes_sticks'			=> $cigarettes_sticks,
 						]);
@@ -149,10 +156,27 @@ class CountryImport implements ToCollection
 					# update existing record of this country
 					else{
 						$countryExisted = true;
-						
+
+						$check_currency = CurrencyRate::where('name', $currency)->first();
+						$currency_id = 0;
+						$currency_rate = 1;
+						if ($check_currency) {
+							$currency_id = $check_currency->id;
+							$currency_rate = $check_currency->amount;
+						}
+						else {
+							$create_currency = CurrencyRate::create([
+								'name' 		=> $currency,
+								'amount'	=> 1,
+							]);
+
+							$currency_id = $create_currency->id;
+							$currency_rate = $create_currency->amount;
+						}
+
 						$country->update([
 							'name' 		=> $name,
-							'currency'	=> $currency,
+							'currency'	=> $currency_id,
 							'region'	=> $region,
 						]);
 
@@ -171,18 +195,25 @@ class CountryImport implements ToCollection
 							'csr_policy'			=> $csr_policy,
 							'acknowledgement'		=> $acknowledgement,
 						]);
+
+
+						$computed_marine_pollution = $marine_pollution != null && $marine_pollution != "" ? $marine_pollution / $currency_rate : $marine_pollution;
+						$computed_waste_management = $waste_management != null && $waste_management != "" ? $waste_management / $currency_rate : $waste_management;
+						$computed_economic_cost = $economic_cost != null && $economic_cost != "" ? $economic_cost / $currency_rate : $economic_cost;
 			
 						CostEstimation::updateOrCreate([
 							'country_id' => $country->id,
 						],[
-							'marine_pollution'			=> $marine_pollution,
-							'waste_management'			=> $waste_management,
+							'marine_pollution'			=> $computed_marine_pollution,
+							'waste_management'			=> $computed_waste_management,
 							'partial_cost'				=> $partial_cost,
 							'marine_cost_per_ton'		=> $marine_cost_per_ton,
 							'waste_cost_per_ton'		=> $waste_cost_per_ton,
 							'cigarettes_consumed'		=> $cigarettes_consumed,
-							'economic_cost'				=> $economic_cost,
+							'cigarettes_consumed_unit'	=> $cigarettes_consumed_unit,
+							'economic_cost'				=> $computed_economic_cost,
 							'economic_cost_currency'	=> $economic_cost_currency,
+							'cigarettes_sticks'			=> $cigarettes_sticks,
 						]);
 
 						# check if has company
