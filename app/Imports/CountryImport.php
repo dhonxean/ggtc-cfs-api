@@ -40,26 +40,23 @@ class CountryImport implements ToCollection
 					#count the total rows imported
 					$this->totalRows++;
 
-					$name = $row[0];
-					$iso2 = $row[1];
-					$currency = $row[2];
-					$currency_symbol = $row[3];
-					$region = $row[4];
-					$csr_local_examples = $row[5];
-					$csr_policy = $row[6];
-					$companies = $row[7] != '' ? explode(',', $row[7]) : [];
-					$acknowledgement = $row[8];
-					$death = $row[9];
+					$publish = $row[0] == 1 ? 1 : 0;
+					$name = $row[1];
+					$iso2 = $row[2];
+					$region = $row[3];
+					$currency = $row[4];
+					$marine_pollution = $row[5];
+					$waste_management = $row[6];
+					$partial_cost = $row[7];
+					$death = $row[8];
+					$economic_cost = $row[9];
+					$economic_cost_currency = $row[4];
 					$cigarettes_consumed = $row[10];
-					$cigarettes_consumed_unit = $row[11];
-					$economic_cost = $row[12];
-					$economic_cost_currency = $row[13];
-					$cigarettes_sticks = $row[14];
-					$marine_pollution = $row[15];
-					$waste_management = $row[16];
-					$marine_cost_per_ton = $row[17];
-					$waste_cost_per_ton = $row[18];
-					$partial_cost = $row[19];
+					$companies = $row[11] != '' ? explode('|', $row[11]) : [];
+					$csr_local_examples = $row[12];
+					$csr_policy = $row[13];
+					$acknowledgement = $row[14];
+					$reference = $row[15];
 
 					$countryExisted = false;
 					$country = Country::where('iso2', $iso2)->first();
@@ -87,9 +84,8 @@ class CountryImport implements ToCollection
 							'name' 				=> $name,
 							'iso2'				=> $iso2,
 							'currency'			=> $currency_id,
-							'currency_symbol'	=> $currency_symbol,
 							'region'			=> isset($region) ? ($region != null && $region != '' ? $region : '') : '',
-							'publish'			=> 0,
+							'publish'			=> $publish,
 						]);
 						
 						$country = Country::find($iso2);
@@ -117,13 +113,9 @@ class CountryImport implements ToCollection
 							'marine_pollution'			=> $computed_marine_pollution,
 							'waste_management'			=> $computed_waste_management,
 							'partial_cost'				=> $partial_cost,
-							'marine_cost_per_ton'		=> $marine_cost_per_ton,
-							'waste_cost_per_ton'		=> $waste_cost_per_ton,
 							'cigarettes_consumed'		=> $cigarettes_consumed,
-							'cigarettes_consumed_unit'	=> $cigarettes_consumed_unit,
 							'economic_cost'				=> $computed_economic_cost,
 							'economic_cost_currency'	=> $economic_cost_currency,
-							'cigarettes_sticks'			=> $cigarettes_sticks,
 						]);
 							
 						# check if has company
@@ -152,6 +144,15 @@ class CountryImport implements ToCollection
 								}
 							}
 						}
+
+						# check if has reference
+						if ($reference != null && $reference != '') {
+							CountryReference::create([
+								'country_id' 	=> $country->id,
+								'content'	=> $reference,
+								'sequence'		=> 1,
+							]);
+						}
 					}
 					# update existing record of this country
 					else{
@@ -175,9 +176,10 @@ class CountryImport implements ToCollection
 						}
 
 						$country->update([
-							'name' 		=> $name,
-							'currency'	=> $currency_id,
-							'region'	=> $region,
+							'name' 				=> $name,
+							'currency'			=> $currency_id,
+							'region'			=> isset($region) ? ($region != null && $region != '' ? $region : '') : '',
+							'publish'			=> $publish,
 						]);
 
 						CountryMetadata::updateOrCreate([
@@ -207,13 +209,9 @@ class CountryImport implements ToCollection
 							'marine_pollution'			=> $computed_marine_pollution,
 							'waste_management'			=> $computed_waste_management,
 							'partial_cost'				=> $partial_cost,
-							'marine_cost_per_ton'		=> $marine_cost_per_ton,
-							'waste_cost_per_ton'		=> $waste_cost_per_ton,
 							'cigarettes_consumed'		=> $cigarettes_consumed,
-							'cigarettes_consumed_unit'	=> $cigarettes_consumed_unit,
 							'economic_cost'				=> $computed_economic_cost,
 							'economic_cost_currency'	=> $economic_cost_currency,
-							'cigarettes_sticks'			=> $cigarettes_sticks,
 						]);
 
 						# check if has company
@@ -242,6 +240,16 @@ class CountryImport implements ToCollection
 									]);
 								}
 							}
+						}
+
+						# check if has reference
+						if ($reference != null && $reference != '') {
+							$country->references()->delete();
+							CountryReference::create([
+								'country_id' 	=> $country->id,
+								'content'	=> $reference,
+								'sequence'		=> 1,
+							]);
 						}
 					}
 
