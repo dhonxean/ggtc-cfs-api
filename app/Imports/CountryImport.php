@@ -71,13 +71,15 @@ class CountryImport implements ToCollection
 							$currency_rate = $check_currency->amount;
 						}
 						else {
-							$create_currency = CurrencyRate::create([
-								'name' 		=> $currency,
-								'amount'	=> 1,
-							]);
-
-							$currency_id = $create_currency->id;
-							$currency_rate = $create_currency->amount;
+							if ($currency != null) {
+								$create_currency = CurrencyRate::create([
+									'name' 		=> $currency,
+									'amount'	=> 1,
+								]);
+	
+								$currency_id = $create_currency->id;
+								$currency_rate = $create_currency->amount;
+							}
 						}
 
 						$country_id = Country::create([
@@ -106,15 +108,15 @@ class CountryImport implements ToCollection
 
 						$computed_marine_pollution = $marine_pollution != null && $marine_pollution != "" ? $marine_pollution / $currency_rate : $marine_pollution;
 						$computed_waste_management = $waste_management != null && $waste_management != "" ? $waste_management / $currency_rate : $waste_management;
-						$computed_economic_cost = $economic_cost != null && $economic_cost != "" ? $economic_cost / $currency_rate : $economic_cost;
+						$computed_partial_cost = $partial_cost != null && $partial_cost != "" ? $partial_cost / $currency_rate : $partial_cost;
 				
 						CostEstimation::create([
 							'country_id'				=> $country->id,
 							'marine_pollution'			=> $computed_marine_pollution,
 							'waste_management'			=> $computed_waste_management,
-							'partial_cost'				=> $partial_cost,
+							'partial_cost'				=> $computed_partial_cost,
 							'cigarettes_consumed'		=> $cigarettes_consumed,
-							'economic_cost'				=> $computed_economic_cost,
+							'economic_cost'				=> $economic_cost,
 							'economic_cost_currency'	=> $economic_cost_currency,
 						]);
 							
@@ -166,13 +168,15 @@ class CountryImport implements ToCollection
 							$currency_rate = $check_currency->amount;
 						}
 						else {
-							$create_currency = CurrencyRate::create([
-								'name' 		=> $currency,
-								'amount'	=> 1,
-							]);
-
-							$currency_id = $create_currency->id;
-							$currency_rate = $create_currency->amount;
+							if ($currency != null) {
+								$create_currency = CurrencyRate::create([
+									'name' 		=> $currency,
+									'amount'	=> 1,
+								]);
+	
+								$currency_id = $create_currency->id;
+								$currency_rate = $create_currency->amount;
+							}
 						}
 
 						$country->update([
@@ -198,19 +202,18 @@ class CountryImport implements ToCollection
 							'acknowledgement'		=> $acknowledgement,
 						]);
 
-
 						$computed_marine_pollution = $marine_pollution != null && $marine_pollution != "" ? $marine_pollution / $currency_rate : $marine_pollution;
 						$computed_waste_management = $waste_management != null && $waste_management != "" ? $waste_management / $currency_rate : $waste_management;
-						$computed_economic_cost = $economic_cost != null && $economic_cost != "" ? $economic_cost / $currency_rate : $economic_cost;
+						$computed_partial_cost = $partial_cost != null && $partial_cost != "" ? $partial_cost / $currency_rate : $partial_cost;
 			
 						CostEstimation::updateOrCreate([
 							'country_id' => $country->id,
 						],[
 							'marine_pollution'			=> $computed_marine_pollution,
 							'waste_management'			=> $computed_waste_management,
-							'partial_cost'				=> $partial_cost,
+							'partial_cost'				=> $computed_partial_cost,
 							'cigarettes_consumed'		=> $cigarettes_consumed,
-							'economic_cost'				=> $computed_economic_cost,
+							'economic_cost'				=> $economic_cost,
 							'economic_cost_currency'	=> $economic_cost_currency,
 						]);
 
