@@ -373,6 +373,7 @@ class CountryController extends Controller
 				->where('publish', 1)
 				->get();
 
+
 		$resultData['selected_country'] = Country::when(isset($r->selected_country), function ($query) use ($r) {
 			$query->where('iso2', $r->selected_country);
 		})
@@ -386,6 +387,20 @@ class CountryController extends Controller
 		])
 		->where('publish', 1)
 		->first();
+		
+		// if country code not exist get the first country available 
+		if ($resultData['selected_country'] == null) {
+			$resultData['selected_country'] = Country::with([
+				'country_detail', 
+				'cost_estimation', 
+				'references', 
+				'companies', 
+				'meta_data',
+				'currency_rate'
+			])
+			->where('publish', 1)
+			->first();
+		}
 		
 		return response([
 			'res' => $resultData
