@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use App\Imports\{
 	CountryImport,
+	CountryAcknowledgementImport,
 	CountryReferenceImport,
 	CompanyImport,
 };
@@ -43,6 +44,11 @@ class ImportController extends Controller
 				$countryImport = new countryImport;
 				Excel::import($countryImport, $r->file);
 				return $countryImport->results;
+				break;
+			case 'countryAcknowledgement':
+				$countryAcknowledgementImport = new CountryAcknowledgementImport;
+				Excel::import($countryAcknowledgementImport, $r->file);
+				return $countryAcknowledgementImport->results;
 				break;
 			case 'reference':
 				$countryReference = new CountryReferenceImport;
