@@ -347,9 +347,9 @@ class StaticTranslationController extends Controller
 				$static_translation->content_fields = $content_fields;
 			}
 
-			$resultData['static'] = $static_translation;
-			$resultData['default'] = $default_translation;
-			
+			$resultData['sttc'] = $static_translation;
+			$resultData['dflt'] = $default_translation;
+
 			return response([
 				'res' => $resultData
 			]);

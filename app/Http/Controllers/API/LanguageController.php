@@ -76,7 +76,7 @@ class LanguageController extends Controller
 			], 400);
 		}
 	}
-	
+
 	public function update($id, Request $r) {
 		$validator = \Validator::make($r->all(), [
 			'name' 	=> 'required',
@@ -100,13 +100,13 @@ class LanguageController extends Controller
 				'name'	=> $r->name,
 				'code'	=> $r->code,
 			]);
-			
+
 			/**
 			 * add image uploads  */
 			$this->updateImages('language', $r, $language, 'flag');
 
 			$language->load('images');
-			
+
 			return response([
 				'res' => $language
 			]);
