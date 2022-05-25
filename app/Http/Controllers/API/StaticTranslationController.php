@@ -81,9 +81,9 @@ class StaticTranslationController extends Controller
 		// 	"back_to_main_site" : "BACK TO MAIN SITE",
 		//  "deaths": "Deaths"
 		// }
-		
+
 		// $default_content_fields = json_decode($r->content);
-		
+
 		$static_content = StaticTranslation::where('language_id', 0)->first();
 		$languages = Language::get();
 		if (!$static_content) {
@@ -93,7 +93,7 @@ class StaticTranslationController extends Controller
 			]);
 		}
 
-		// uncomment this is importing all the languages with the default content 
+		// uncomment this is importing all the languages with the default content
 
 		// foreach ($languages as $key => $item) {
 		// 	$check_translation = StaticTranslation::where('language_id', $item->id)->first();
@@ -296,10 +296,7 @@ class StaticTranslationController extends Controller
 
 	public function update ($id, Request $r) {
 		$validator = \Validator::make($r->all(), [
-			'language_id' => [
-				'required',
-				Rule::unique('static_translations')->ignore($id),
-			],
+			'language_id' => 'required',
 			'header_title'    			=> 'sometimes',
 			'dropdown_label'   			=> 'sometimes',
 			'download'    				=> 'sometimes',
