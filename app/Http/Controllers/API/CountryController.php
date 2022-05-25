@@ -459,6 +459,14 @@ class CountryController extends Controller
 			array_push($resultData['available_translations'], $translations[$key]);
 		}
 
+		$language_selected = WorldCountry::where('country_code', $resultData['selected_country']->iso2)->first();
+
+		$resultData['language_id_selected'] = null;
+		
+		if ($language_selected) {
+			$resultData['language_id_selected'] = $language_selected->language_id;
+		}
+
 		return response([
 			'res' => $resultData
 		]);
