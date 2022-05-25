@@ -17,6 +17,7 @@ class CreateLanguagesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code')->nullable();
+            $table->bigInteger('sequence')->default(2);
             $table->timestamps();
             $table->softDeletes();
         });

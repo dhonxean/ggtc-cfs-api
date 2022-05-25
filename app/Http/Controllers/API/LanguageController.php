@@ -122,11 +122,17 @@ class LanguageController extends Controller
 		$language = Language::where('id', $id)->first();
 
 		if ($language) {
-			$language->delete();
-
-			return response([
-				'res' => ['language deleted.']
-			]);
+			if ($language->sequence != 1) {
+				$language->delete();
+				return response([
+					'res' => ['language deleted.']
+				]);
+			}
+			else {
+				return response([
+					'errors' => ['Language cannot be deleted.']
+				], 400);
+			}
 		}
 		else {
 			return response([
@@ -147,6 +153,10 @@ class LanguageController extends Controller
 					else {
 						$query->orderBy($r->sort_by);
 					}
+				})
+				->when(isset($r->first_load), function ($query) use ($r) {
+					$query->orderBy('sequence');
+					$query->orderBy('name');
 				})
 				->when( $r->filled('all') , function ($q, $r) {
 					return $q->get();
