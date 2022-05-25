@@ -367,6 +367,7 @@ class CountryController extends Controller
 	 **
 	 **/
 	public function allCountry(Request $r) {
+		$resultData['user_country_code'] = $r->selected_country;
 		$resultData['country'] = Country::when(isset($r->keyword), function ($query) use ($r) {
 					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%');	
 				})
@@ -395,8 +396,52 @@ class CountryController extends Controller
 			])
 		->where('publish', 1)
 		->first();
-					
-		// populate available dynamic translation for specific country
+		
+		// if country code not exist get the first country available 
+		if ($resultData['selected_country'] == null) {
+			$resultData['selected_country'] = Country::with([
+				'country_detail', 
+				'cost_estimation', 
+				'references', 
+				'companies', 
+				'meta_data',
+				'currency_rate'
+				])
+			->where('publish', 1)
+			->first();
+		}
+
+		// populate available dynamic and static transla tion for specific country
+		$resultData['available_translations'] = [];
+
+		$english_language = Language::where([
+							'sequence' => 1,
+						])
+						->with([
+							'static_translation',
+							'images'
+						])
+						->first();
+		if ($english_language) {
+
+			if ($english_language->static_translation) {
+				$content_fields = json_decode($english_language->static_translation->content_fields);
+				$english_language->static_translation->content_fields = $content_fields;
+
+				$english_translation = array(
+					'id' => 0,
+					'country_id' => $resultData['selected_country']->id,
+					'language_id' => $english_language->id,
+					'csr_policy'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->csr_policy : null,
+					'csr_local_examples'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->csr_local_examples : null,
+					'csr_acknowledgement'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->csr_acknowledgement : null,
+					'language' => $english_language
+				);
+
+				array_push($resultData['available_translations'], $english_translation);
+			}
+		}
+
 		$translations = DynamicTranslation::where('country_id', $resultData['selected_country']->id)
 							->with([
 								'language' => function ($q) use($r) {
@@ -411,39 +456,9 @@ class CountryController extends Controller
 			if ($item->language->static_translation != null) {
 				$item->language->static_translation->content_fields = json_decode($item->language->static_translation->content_fields);
 			}
+			array_push($resultData['available_translations'], $translations[$key]);
 		}
 
-		$resultData['translations'] = $translations;
-							
-		// select language of the user based on the country code of location
-		$resultData['selected_translation'] = null;
-		if ($r->user_country_code) {
-			$user_country = WorldCountry::where('country_code', $r->user_country_code)->first();
-
-			if ($user_country) {
-				$resultData['selected_translation'] = DynamicTranslation::where([
-												'country_id' 	=> $resultData['selected_country']->id,
-												'language_id'	=> $user_country->language_id
-											])->first();
-			}
-		}
-
-		$resultData['user_country_code'] = $r->user_country_code;
-
-		
-		// if country code not exist get the first country available 
-		if ($resultData['selected_country'] == null) {
-			$resultData['selected_country'] = Country::with([
-				'country_detail', 
-				'cost_estimation', 
-				'references', 
-				'companies', 
-				'meta_data',
-				'currency_rate'
-			])
-			->where('publish', 1)
-			->first();
-		}
 		return response([
 			'res' => $resultData
 		]);

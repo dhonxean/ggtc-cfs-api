@@ -158,6 +158,9 @@ class LanguageController extends Controller
 					$query->orderBy('sequence');
 					$query->orderBy('name');
 				})
+				->when(isset($r->exclude_english), function ($query) use ($r) {
+					$query->where('sequence', 2);
+				})
 				->when( $r->filled('all') , function ($q, $r) {
 					return $q->get();
 				}, function ($q) {
