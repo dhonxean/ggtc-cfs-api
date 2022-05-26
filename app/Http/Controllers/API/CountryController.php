@@ -27,7 +27,7 @@ use App\Models\{
 
 class CountryController extends Controller
 {
-	
+
 	/**
 	 ** ###[ CMS APIs ]###########################
 	**
@@ -106,7 +106,7 @@ class CountryController extends Controller
 			'region'			=> isset($r->region) ? ($r->region != null && $r->region != '' ? $r->region : '') : '',
 			'publish'			=> $r->publish,
 		]);
-		
+
 		$country = Country::find($r->country_code);
 
 		CountryMetadata::create([
@@ -160,7 +160,7 @@ class CountryController extends Controller
 		}
 
 		$country->load('country_detail', 'cost_estimation', 'references', 'companies', 'meta_data');
-		
+
 		return response([
 			'res' => $country
 		]);
@@ -169,10 +169,10 @@ class CountryController extends Controller
 	public function info($id) {
 		$country = Country::where('id', $id)
 				->with([
-					'country_detail', 
-					'cost_estimation', 
-					'references', 
-					'companies', 
+					'country_detail',
+					'cost_estimation',
+					'references',
+					'companies',
 					'meta_data',
 					'currency_rate'
 				])
@@ -283,7 +283,7 @@ class CountryController extends Controller
 				'economic_cost_currency'	=> $r->economic_cost_currency,
 				'cigarettes_sticks'			=> $r->cigarettes_sticks,
 			]);
-	
+
 			$country->references()->delete();
 			if (!empty($r->reference)) {
 				foreach ($r->reference as $key => $item) {
@@ -294,7 +294,7 @@ class CountryController extends Controller
 					]);
 				}
 			}
-	
+
 			if (!empty($r->company)) {
 				$country->companies()->delete();
 				foreach ($r->company as $key => $item) {
@@ -307,7 +307,7 @@ class CountryController extends Controller
 			}
 
 			$country->load('country_detail', 'cost_estimation', 'references', 'companies', 'meta_data');
-		
+
 			return response([
 				'res' => $country
 			]);
@@ -338,7 +338,7 @@ class CountryController extends Controller
 
 	public function getAllCountry(Request $r) {
 		$country = Country::when(isset($r->keyword), function ($query) use ($r) {
-					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%');	
+					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%');
 				})
 				->with('currency_rate')
 				->when(isset($r->sort_by), function ($query) use ($r) {
@@ -360,8 +360,8 @@ class CountryController extends Controller
 			'res' => $country
 		]);
 	}
-	
-	
+
+
 	/**
 	 ** ###[ WEB APIs ]###########################
 	 **
@@ -369,7 +369,7 @@ class CountryController extends Controller
 	public function allCountry(Request $r) {
 		$resultData['user_country_code'] = $r->selected_country;
 		$resultData['country'] = Country::when(isset($r->keyword), function ($query) use ($r) {
-					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%');	
+					$query->where('name', 'LIKE', '%'.strtolower($r->keyword).'%');
 				})
 				->with('currency_rate')
 				->when(isset($r->sort_by), function ($query) use ($r) {
@@ -387,23 +387,23 @@ class CountryController extends Controller
 			$query->where('iso2', $r->selected_country);
 		})
 		->with([
-			'country_detail', 
-			'cost_estimation', 
-			'references', 
-			'companies', 
+			'country_detail',
+			'cost_estimation',
+			'references',
+			'companies',
 			'meta_data',
 			'currency_rate'
 			])
 		->where('publish', 1)
 		->first();
-		
-		// if country code not exist get the first country available 
+
+		// if country code not exist get the first country available
 		if ($resultData['selected_country'] == null) {
 			$resultData['selected_country'] = Country::with([
-				'country_detail', 
-				'cost_estimation', 
-				'references', 
-				'companies', 
+				'country_detail',
+				'cost_estimation',
+				'references',
+				'companies',
 				'meta_data',
 				'currency_rate'
 				])
@@ -434,7 +434,7 @@ class CountryController extends Controller
 					'language_id' => $english_language->id,
 					'csr_policy'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->csr_policy : null,
 					'csr_local_examples'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->csr_local_examples : null,
-					'csr_acknowledgement'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->acknowledgement : null,
+					'acknowledgement'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->acknowledgement : null,
 					'language' => $english_language
 				);
 
@@ -446,11 +446,11 @@ class CountryController extends Controller
 							->with([
 								'language' => function ($q) use($r) {
 									$q->with([
-										'static_translation', 
+										'static_translation',
 										'images'
 									]);
 								}
-							])	
+							])
 							->get();
 		foreach($translations as $key => $item) {
 			if ($item->language->static_translation != null) {
@@ -462,7 +462,7 @@ class CountryController extends Controller
 		$language_selected = WorldCountry::where('country_code', $resultData['selected_country']->iso2)->first();
 
 		$resultData['language_id_selected'] = null;
-		
+
 		if ($language_selected) {
 			$resultData['language_id_selected'] = $language_selected->language_id;
 		}
@@ -502,9 +502,9 @@ class CountryController extends Controller
 		/* generate and save image to storage */
 		$image_64 = $r->image;
 		$extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
-		$replace = substr($image_64, 0, strpos($image_64, ',')+1); 
-		$image = str_replace($replace, '', $image_64); 
-		$image = str_replace(' ', '+', $image); 
+		$replace = substr($image_64, 0, strpos($image_64, ',')+1);
+		$image = str_replace($replace, '', $image_64);
+		$image = str_replace(' ', '+', $image);
 		$imageName = "Customized_Fact_Sheet_-_$countryCode.$extension";
 
 		Storage::disk('public')->put("$image_url/$imageName", base64_decode($image));
