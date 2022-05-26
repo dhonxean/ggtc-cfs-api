@@ -443,28 +443,41 @@ class CountryController extends Controller
 		}
 
 		$translations = DynamicTranslation::where('country_id', $resultData['selected_country']->id)
+							->has('language.static_translation')
 							->with([
 								'language' => function ($q) use($r) {
 									$q->with([
 										'static_translation',
 										'images'
-									]);
+									])
+									->has('static_translation');
 								}
 							])
 							->get();
+
 		foreach($translations as $key => $item) {
+			$item->acknowledgement = $item->csr_acknowledgement;
 			if ($item->language->static_translation != null) {
 				$item->language->static_translation->content_fields = json_decode($item->language->static_translation->content_fields);
 			}
 			array_push($resultData['available_translations'], $translations[$key]);
 		}
 
-		$language_selected = WorldCountry::where('country_code', $resultData['selected_country']->iso2)->first();
+		$language_selected = WorldCountry::where('country_code', $resultData['selected_country']->iso2)
+							->with([
+								'language' => function ($q) {
+									$q->with('static_translation');
+								}
+							])
+							->first();
 
 		$resultData['language_id_selected'] = null;
 
-		if ($language_selected) {
+		if ($language_selected->language->static_translation) {
 			$resultData['language_id_selected'] = $language_selected->language_id;
+		}
+		else {
+			$resultData['language_id_selected'] = $english_language->id;
 		}
 
 		return response([
