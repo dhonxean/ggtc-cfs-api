@@ -434,7 +434,7 @@ class CountryController extends Controller
 					'language_id' => $english_language->id,
 					'csr_policy'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->csr_policy : null,
 					'csr_local_examples'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->csr_local_examples : null,
-					'csr_acknowledgement'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->csr_acknowledgement : null,
+					'csr_acknowledgement'	=> $resultData['selected_country']->country_detail != null ? $resultData['selected_country']->country_detail->acknowledgement : null,
 					'language' => $english_language
 				);
 
