@@ -10,6 +10,7 @@ use App\Models\{
 	Language,
 	Country,
 	DynamicTranslation,
+	StaticTranslation
 };
 
 class DynamicTranslationController extends Controller
@@ -58,6 +59,18 @@ class DynamicTranslationController extends Controller
 				'csr_local_examples' 	=> $r->csr_local_examples,
 				'csr_acknowledgement' 	=> $r->csr_acknowledgement,
 			]);
+
+			// checking if the selected language has a static translation if not insert static translation and the content fields must be the english version
+			$default_translation = StaticTranslation::where('is_default', 1)->first();
+			if ($default_translation) {
+				$check_language_translation = StaticTranslation::where('language_id', $r->language_id)->first();
+				if (!$check_language_translation) {
+					StaticTranslation::create([
+						'language_id' => $r->language_id,
+						'content_fields' => $default_translation->content_fields,
+					]);
+				}
+			}
 
 			$translation->load('language');
 
@@ -119,6 +132,18 @@ class DynamicTranslationController extends Controller
 			]);
 
 			$translation->load('language');
+
+			// checking if the selected language has a static translation if not insert static translation and the content fields must be the english version
+			$default_translation = StaticTranslation::where('is_default', 1)->first();
+			if ($default_translation) {
+				$check_language_translation = StaticTranslation::where('language_id', $r->language_id)->first();
+				if (!$check_language_translation) {
+					StaticTranslation::create([
+						'language_id' => $r->language_id,
+						'content_fields' => $default_translation->content_fields,
+					]);
+				}
+			}
 
 			return response([
 				'res' => $translation
