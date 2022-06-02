@@ -140,6 +140,7 @@ Route::group(['prefix' => 'v2'], function () {
 					Route::post('/update/{id}', 'update');
 					Route::delete('/delete/{id}', 'delete');
 					Route::post('/get-all-static-translation', 'getAllStaticTranslation');
+					Route::post('/import-language-static-translation', 'importLanguageStaticTranslation');
 				});
 			});
 		});

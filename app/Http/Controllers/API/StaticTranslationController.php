@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use App\Imports\{
+	LanguageStaticTranslationImport,
+};
 use App\Models\{
 	StaticTranslation,
 	Language,
@@ -627,5 +632,21 @@ class StaticTranslationController extends Controller
 			// 'res' => collect($static_translations)->paginate(20)
 			'res' => $static_translations
 		]);
+	}
+
+	public function importLanguageStaticTranslation(Request $r) {
+		$validator = \Validator::make($r->all(), [
+			'file'  => 'required',
+		]);
+
+		if ($validator->fails()) {
+			return response([
+				'errors' => $validator->errors()->all()
+			], 400);
+		}
+
+		$languageStaticTranslation = new LanguageStaticTranslationImport;
+		Excel::import($languageStaticTranslation, $r->file);
+		return $languageStaticTranslation->results;
 	}
 }
