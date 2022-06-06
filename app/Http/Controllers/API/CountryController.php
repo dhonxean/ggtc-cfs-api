@@ -498,10 +498,12 @@ class CountryController extends Controller
 			'dpi' => 150
 		]);
 
+		$share_url = 'uploads/image-share';
 		$image_url = 'uploads/image-reports';
 		$pdf_url = 'uploads/pdf-reports';
 
 		if ($r->languageCode) {
+			$share_url = "uploads/translations/image-share/$r->languageCode";
 			$image_url = "uploads/translations/image-reports/$r->languageCode";
 			$pdf_url = "uploads/translations/pdf-reports/$r->languageCode";
 		}
@@ -522,6 +524,18 @@ class CountryController extends Controller
 
 		Storage::disk('public')->put("$image_url/$imageName", base64_decode($image));
 		/* end */
+
+		// generate image for share module 
+		if ($r->social_share_downloadable) {
+			$share_image_64 = $r->social_share_downloadable;
+			$extension = explode('/', explode(':', substr($share_image_64, 0, strpos($share_image_64, ';')))[1])[1];
+			$replace = substr($share_image_64, 0, strpos($share_image_64, ',')+1);
+			$share_image = str_replace($replace, '', $share_image_64);
+			$share_image = str_replace(' ', '+', $share_image);
+			$share_imageName = "Customized_Fact_Sheet_-_$countryCode.$extension";
+	
+			Storage::disk('public')->put("$share_url/$share_imageName", base64_decode($share_image));
+		}
 
 
 		return response([
