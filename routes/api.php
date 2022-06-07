@@ -144,8 +144,8 @@ Route::group(['prefix' => 'v2'], function () {
 				});
 			});
 		});
-
-
+		
+		
 		// dynamic translation
 		Route::group(['prefix' => 'dynamic-translation'], function () {
 			Route::controller(DynamicTranslationController::class)->group(function () {
@@ -155,6 +155,7 @@ Route::group(['prefix' => 'v2'], function () {
 					Route::post('/update/{id}', 'update');
 					Route::delete('/delete/{id}', 'delete');
 					Route::post('/get-country-dynamic-translation', 'getCountryDynamicTranslation');
+					Route::post('/import-dynamic-translation', 'importDynamicTranslation');
 				});
 			});
 		});

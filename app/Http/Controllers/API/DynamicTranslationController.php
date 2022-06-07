@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use App\Imports\{
+	DynamicTranslationImport,
+};
 use App\Models\{
 	Language,
 	Country,
@@ -212,5 +217,21 @@ class DynamicTranslationController extends Controller
 		return response([
 			'res' => $dynamic_translation
 		]);
+	}
+
+	public function importDynamicTranslation(Request $r) {
+		$validator = \Validator::make($r->all(), [
+			'file'  => 'required',
+		]);
+
+		if ($validator->fails()) {
+			return response([
+				'errors' => $validator->errors()->all()
+			], 400);
+		}
+
+		$dynamicTranslation = new DynamicTranslationImport;
+		Excel::import($dynamicTranslation, $r->file);
+		return $dynamicTranslation->results;
 	}
 }
