@@ -1,6 +1,6 @@
 /*
 SQLyog Community v13.1.6 (64 bit)
-MySQL - 5.7.38-0ubuntu0.18.04.1 : Database - ggtc_cfs_staging
+MySQL - 5.7.38-0ubuntu0.18.04.1 : Database - ggtc_cfs_language_mirror_live
 *********************************************************************
 */
 
@@ -12,9 +12,9 @@ MySQL - 5.7.38-0ubuntu0.18.04.1 : Database - ggtc_cfs_staging
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`ggtc_cfs_staging` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`ggtc_cfs_language_mirror_live` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
-USE `ggtc_cfs_staging`;
+USE `ggtc_cfs_language_mirror_live`;
 
 /*Table structure for table `companies` */
 
@@ -4793,7 +4793,7 @@ CREATE TABLE `languages` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=279 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=223 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `languages` */
 
@@ -4877,6 +4877,7 @@ insert  into `oauth_access_tokens`(`id`,`user_id`,`client_id`,`name`,`scopes`,`r
 ('b77fe96812a9c1256c8ae372fcb7c5c512922d36ede06855799c53b02762f05a053631938f95370c',1,1,'GGTC CFS Admin API Access Token','[]',0,'2022-05-31 01:50:19','2022-05-31 01:50:19','2022-11-30 17:50:19'),
 ('cc7c2dd424e17bb376e95b1283b1b92ac13ad9bb4c776ff7f60b9ccaf9d0ecd202c8ea02fabb387f',1,1,'GGTC CFS Admin API Access Token','[]',0,'2022-06-08 09:54:34','2022-06-08 09:54:34','2022-12-08 09:54:34'),
 ('e0891775e8f6a816e10f2b25fa68d2eb854329abf4cdebddb1cf4d0948670452b1cb44bfe0d6ef8c',2,1,'GGTC CFS Admin API Access Token','[]',1,'2022-06-08 09:48:07','2022-06-08 09:48:07','2022-12-08 09:48:07'),
+('f345e496f759a336f2c2dad71ead97e214afa8d95898f24ad64635391d19080b2d95e49aa58458ad',1,1,'GGTC CFS Admin API Access Token','[]',0,'2022-06-08 12:00:43','2022-06-08 12:00:43','2022-12-08 12:00:43'),
 ('f3797f8ca2f93324fbd3bba892cc483808e7b25da39d434f077d8c1140bc861770878be2f5f7a943',1,1,'GGTC CFS Admin API Access Token','[]',0,'2022-05-12 02:17:36','2022-05-12 02:17:36','2022-11-11 18:17:36');
 
 /*Table structure for table `oauth_auth_codes` */
@@ -5057,7 +5058,7 @@ CREATE TABLE `users` (
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`first_name`,`middle_name`,`last_name`,`username`,`status`,`email`,`email_verified_at`,`password`,`remember_token`,`created_at`,`updated_at`,`deleted_at`,`role_id`) values 
-(1,'admin',NULL,'cfs','admin','Active','admin@dbm.com',NULL,'$2y$10$ZxpNngawoSt3j6xbxS3pEu/1e1LH/.PU04yaVbCT3yA6dx/e2Dl96',NULL,'2022-05-11 16:49:03','2022-05-11 16:49:03',NULL,1),
+(1,'admin',NULL,'cfs','admin','Active','admin@dbm.com',NULL,'$2y$10$ZD1FNrgOUSwD88PQY3qkW.v.ZiuPEGNZ78KLoaZsnOVsjbHU6OPai',NULL,'2022-05-11 16:49:03','2022-06-08 12:00:21',NULL,1),
 (2,'admin',NULL,'cfs','ggtc','Active','ggtc@admin.com',NULL,'$2y$10$F.3dPwMhS.wMdfgrOj8uQemIwIK7P2GyEP5DS89H6i4qvmQ2Tt2Z.',NULL,'2022-05-19 01:47:40','2022-05-19 01:47:40',NULL,2),
 (3,'admin',NULL,'cfs','ggtc_admin','Active','cfs.admin@gmail.com',NULL,'$2y$10$qRHljFMa.c7RvLTLIFd2DOvhACLt056tmAW2j6Rarv0/vuq3j2ula',NULL,'2022-05-31 01:52:25','2022-05-31 01:52:25',NULL,2);
 

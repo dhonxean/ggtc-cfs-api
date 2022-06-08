@@ -148,7 +148,7 @@ class AdminController extends Controller
 			], 400);
 		}
 
-		$user = User::where('id', $r->user()->id)->first();
+		$user = User::where('id', $id)->first();
 
 		if ($user) {
 			$user->update([
