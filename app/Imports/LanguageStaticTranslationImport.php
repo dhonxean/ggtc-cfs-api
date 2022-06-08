@@ -131,47 +131,37 @@ class LanguageStaticTranslationImport implements ToCollection
 					else {
 						$language = Language::where('code', $language_code)->first();
 						$language_id = null;
-						if (!$language) {
-							$create_language = Language::create([
-								'name' => $language_name,
-								'code' => $language_code
-							]);
-
-							$language_id = $create_language;
-						}
-						else {
+						if ($language) {
 							$language_id = $language->id;
-						}
-
-						$static_translation = StaticTranslation::where('language_id', $language_id)->first();
-
-						$default_translation = StaticTranslation::where('is_default', 1)->first();
-						if ($default_translation) {
-							$default_translation->content_fields = json_decode($default_translation->content_fields, JSON_OBJECT_AS_ARRAY);
-						}
-
-						foreach($content_fields as $index => $row) {
-							if (!$row) {
-								if ($default_translation) {
-									$content_fields->{$index} = isset($default_translation->content_fields[$index]) ? $default_translation->content_fields[$index] : $row;
+							$static_translation = StaticTranslation::where('language_id', $language_id)->first();
+							$default_translation = StaticTranslation::where('is_default', 1)->first();
+							if ($default_translation) {
+								$default_translation->content_fields = json_decode($default_translation->content_fields, JSON_OBJECT_AS_ARRAY);
+							}
+							foreach($content_fields as $index => $row) {
+								if (!$row) {
+									if ($default_translation) {
+										$content_fields->{$index} = isset($default_translation->content_fields[$index]) ? $default_translation->content_fields[$index] : $row;
+									}
 								}
+							}
+	
+							
+							if (!$static_translation) {
+								$create_static_translation = StaticTranslation::create([
+									'language_id' => $language_id,
+									'content_fields' => json_encode($content_fields)
+								]);
+							}
+							else {
+								$staticTranslationExisted = true;
+									
+								$static_translation->update([
+									'content_fields' => json_encode($content_fields)
+								]);
 							}
 						}
 
-						
-						if (!$static_translation) {
-							$create_static_translation = StaticTranslation::create([
-								'language_id' => $language_id,
-								'content_fields' => json_encode($content_fields)
-							]);
-						}
-						else {
-							$staticTranslationExisted = true;
-								
-							$static_translation->update([
-								'content_fields' => json_encode($content_fields)
-							]);
-						}
 
 						if ($staticTranslationExisted) {
 							$this->success("Row " . ($key + 1) . ": Static Translation Updated", $key);
