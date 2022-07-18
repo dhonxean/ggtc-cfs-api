@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
+use App\Http\Controllers\API\{
+	TestController,
+};
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group(['prefix' => 'download'], function () {
+    Route::controller(TestController::class)->group(function () {
+        Route::get('banner', 'testDownload');
+    });
 });

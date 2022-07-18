@@ -12,6 +12,7 @@ use App\Http\Controllers\API\{
 	WorldCountryController,
 	StaticTranslationController,
 	DynamicTranslationController,
+	BannersController,
 };
 
 /*
@@ -85,14 +86,37 @@ Route::group(['prefix' => 'v1'], function () {
 				});
 			});
 		});
+		
+		// banners
+		Route::group(['prefix' => 'banner'], function () {
+			Route::controller(BannersController::class)->group(function () {
+				Route::middleware('auth.admin')->group( function () {
+					Route::get('list', 'list');
+					Route::post('create', 'create');
+					Route::get('info/{id}', 'info');
+					Route::delete('delete/{id}', 'delete');
+					Route::post('update/{id}', 'update');
+				});
+			});
+		});
+
 	});
 
 	// Web routes
 	Route::group(['prefix' => 'web'], function () {
+
+		// country
 		Route::group(['prefix' => 'country'], function () {
 			Route::controller(CountryController::class)->group(function () {
 				Route::post('get-all-country', 'allCountry');
 				Route::post('generate-image-pdf', 'generate');
+			});
+		});
+
+		// banners
+		Route::group(['prefix' => 'banner'], function () {
+			Route::controller(BannersController::class)->group(function () {
+				Route::get('get-banner/{type}', 'getBanners');
 			});
 		});
 	});
