@@ -4,9 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{
+	Hash,
+	Validator,
+	Storage,
+	Response
+};
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Traits\MainTraits;
 
@@ -176,16 +180,35 @@ class BannersController extends Controller
 	 ** ###[ WEB APIs ]###########################
 	**
 	**/
-	public function getBanners($type) {
-		$banner = Banner::where([
-			'type' => $type,
+	public function getBanners() {
+		$data['top'] = Banner::where([
+			'type' => 'top',
 			'published' => 1
 		])
-		->with('images')
+		->with([
+			'images',
+			'banner_file'
+		])
+		->first();
+
+		$data['bottom'] = Banner::where([
+			'type' => 'bottom',
+			'published' => 1
+		])
+		->with([
+			'images',
+			'banner_file'
+		])
 		->first();
 
 		return response([
-			'res' => $banner
+			'res' => $data
 		]);
+	}
+
+	public function downloadBanner(BannerFile $id) {
+		$file = public_path().'/storage/'.$id->true_path;
+		// return $id->true_path;
+		return Response::download($file);
 	}
 }

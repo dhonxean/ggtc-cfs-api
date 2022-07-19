@@ -116,7 +116,8 @@ Route::group(['prefix' => 'v1'], function () {
 		// banners
 		Route::group(['prefix' => 'banner'], function () {
 			Route::controller(BannersController::class)->group(function () {
-				Route::get('get-banner/{type}', 'getBanners');
+				Route::get('get-banner', 'getBanners');
+				Route::get('download-banner-file/{id}', 'downloadBanner');
 			});
 		});
 	});

@@ -21,4 +21,8 @@ class BannerFile extends Model
         // return url('/') . '/' . $value;
         return url('/') . '/storage/' . $value;
     } 
+
+    public function getTruepathAttribute () {
+        return $this->attributes['file_path'];
+    } 
 }
