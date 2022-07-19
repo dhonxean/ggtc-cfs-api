@@ -8,16 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Traits\ModelTraits;
 
-class Banner extends Model
+class BannerFile extends Model
 {
     use HasFactory, SoftDeletes, ModelTraits;
-    
-    public $modelName = 'banner';
-    public $table     = 'banners';
+
+    public $modelName = 'banner_file';
+    public $table     = 'banner_files';
 
     protected $guarded = ['created_at'];
 
-    public function banner_file () {
-        return $this->hasOne(BannerFile::class);
-    }
+    public function getFilePathAttribute ($value) {
+        // return url('/') . '/' . $value;
+        return url('/') . '/storage/' . $value;
+    } 
 }
