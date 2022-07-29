@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Traits\MainTraits;
 use App\Models\{
 	ResourcesYear,
+	ResourcesContent,
     Resource,
 };
 
@@ -66,28 +67,28 @@ class ResourcesController extends Controller
 
     public function list (Request $r) {
         $resource = Resource::select('resources.id', 'resources.file_title', 'resources.year_id', 'year.year', 'resources.created_at')
-        ->when(isset($r->keyword), function ($query) use ($r) {
+        ->when(isset($r->keyword), function ($q) use ($r) {
             $q->where('resources.file_title', 'LIKE', '%'.strtolower($r->keyword).'%');
         })
         ->join('resources_years as year', 'year.id', '=', 'resources.year_id')
         ->when(isset($r->year_id), function ($q) use ($r) {
             $q->where('year_id', $r->year_id);
         })
-        ->when(isset($r->sort_by), function ($query) use ($r) {
+        ->when(isset($r->sort_by), function ($q) use ($r) {
             if ($r->sort_by == 'year') {
                 if ($r->order_type == 'desc') {
-                    $query->orderByDesc('year.year');
+                    $q->orderByDesc('year.year');
                 }
                 else {
-                    $query->orderBy('year.year');
+                    $q->orderBy('year.year');
                 }
             }
             else {
                 if ($r->order_type == 'desc') {
-                    $query->orderByDesc('resources.'.$r->sort_by);
+                    $q->orderByDesc('resources.'.$r->sort_by);
                 }
                 else {
-                    $query->orderBy('resources.'.$r->sort_by);
+                    $q->orderBy('resources.'.$r->sort_by);
                 }
             }
         })
@@ -148,7 +149,7 @@ class ResourcesController extends Controller
 
                 
             }
-            
+
             $id->load('year');
 
             return response ([
@@ -160,5 +161,49 @@ class ResourcesController extends Controller
                 'errors' => ['Invalid Year']
             ], 400);
         }
+    }
+
+    public function createUpdateContent (Request $r) {
+        $validator = \Validator::make($r->all(), [
+			'title' 		=> 'required',
+			'description'	=> 'required',
+            'id'            => 'sometimes'
+		]);
+
+        if ($validator->fails()) {
+			return response([
+				'errors' => $validator->errors()->all()
+			], 400);
+		}
+
+        $content = ResourcesContent::first();
+        if ($content) {
+            $content->update([
+                'title' => $r->title,
+                'description' => $r->description,
+            ]);
+
+            return response ([
+                'res' => $content
+            ]); 
+        }
+        else {
+            $create = ResourcesContent::create([
+                'title' => $r->title,
+                'description' => $r->description,
+            ]);
+
+            return response ([
+                'res' => $create
+            ]); 
+        }
+    }
+
+    public function contentInfo () {
+        $content = ResourcesContent::first();
+
+        return response ([
+            'res' => $content
+        ]);
     }
 }

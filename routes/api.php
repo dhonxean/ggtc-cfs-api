@@ -126,6 +126,14 @@ Route::group(['prefix' => 'v1'], function () {
 					});
 				});
 			});
+			Route::group(['prefix' => 'content'], function () {
+				Route::controller(ResourcesController::class)->group(function () {
+					Route::middleware('auth.admin')->group( function () {
+						Route::post('create-update', 'createUpdateContent');
+						Route::get('info', 'contentInfo');
+					});
+				});
+			});
 		});
 	});
 
