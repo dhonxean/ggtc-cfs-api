@@ -13,6 +13,8 @@ use App\Http\Controllers\API\{
 	StaticTranslationController,
 	DynamicTranslationController,
 	BannersController,
+	ResourcesYearController,
+	ResourcesController
 };
 
 /*
@@ -100,6 +102,31 @@ Route::group(['prefix' => 'v1'], function () {
 			});
 		});
 
+		// resources
+		Route::group(['prefix' => 'resources'], function () {
+			Route::group(['prefix' => 'year'], function () {
+				Route::controller(ResourcesYearController::class)->group(function () {
+					Route::middleware('auth.admin')->group( function () {
+						Route::post('create', 'create');
+						Route::get('list', 'list');
+						Route::get('info/{id}', 'info');
+						Route::delete('delete/{id}', 'delete');
+						Route::post('update/{id}', 'update');
+					});
+				});
+			});
+			Route::group(['prefix' => 'resource'], function () {
+				Route::controller(ResourcesController::class)->group(function () {
+					Route::middleware('auth.admin')->group( function () {
+						Route::post('create', 'create');
+						Route::post('list', 'list');
+						Route::get('info/{id}', 'info');
+						Route::delete('delete/{id}', 'delete');
+						Route::post('update/{id}', 'update');
+					});
+				});
+			});
+		});
 	});
 
 	// Web routes
