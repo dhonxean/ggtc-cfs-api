@@ -27,6 +27,6 @@ class ResourcesYear extends Model
     } 
 
     public function resources() {
-        return $this->hasMany(Resource::class, 'id', 'year_id');
+        return $this->hasMany(Resource::class, 'year_id', 'id');
     }
 }

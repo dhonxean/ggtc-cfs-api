@@ -4,7 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{
+    Validator,
+    Response
+};
 use Illuminate\Validation\Rule;
 use App\Traits\MainTraits;
 use App\Models\{
@@ -206,4 +209,35 @@ class ResourcesController extends Controller
             'res' => $content
         ]);
     }
+
+    /**
+	 ** ###[ WEB APIs ]###########################
+	**
+	**/
+    public function getResources () {
+        $data['resources'] = ResourcesYear::whereHas('resources')
+        ->with([
+            'images' => function ($q) {
+                $q->select('id','parent_id','model','category','title','alt','path');
+            },
+            'resources'
+        ])
+        ->OrderByDesc('year')
+        ->get();
+
+        $data['resources_headers'] = ResourcesContent::first();
+
+        return response ([
+            'res' => $data
+        ]);
+    }
+
+    public function downloadResources(Resource $id) {
+		$file = public_path().'/storage/'.$id->true_path;
+        $headers = [
+            'Content-Type' => 'application/pdf',
+        ];
+
+        return response()->download($file, $id->file_title.'.pdf', $headers);
+	}
 }

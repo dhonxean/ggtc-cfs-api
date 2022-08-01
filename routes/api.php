@@ -155,6 +155,15 @@ Route::group(['prefix' => 'v1'], function () {
 				Route::get('download-banner-file/{id}', 'downloadBanner');
 			});
 		});
+
+		// resources
+		Route::group(['prefix' => 'resources'], function () {
+			Route::controller(ResourcesController::class)->group(function () {
+				Route::get('get-resources', 'getResources');
+				Route::get('download-resources-file/{id}', 'downloadResources');
+			});
+		});
+
 	});
 });
 
