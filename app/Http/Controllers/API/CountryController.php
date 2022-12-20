@@ -472,17 +472,21 @@ class CountryController extends Controller
 							->first();
 
 		$resultData['language_id_selected'] = null;
-
-		if ($language_selected->language->static_translation) {
-			$resultData['language_id_selected'] = $language_selected->language_id;
-			$existing = false;
-			foreach ($resultData['available_translations'] as $key => $value) {
-				if ($language_selected->language_id == $value['language_id']) {
-					$existing = true;
+		if ($language_selected) {
+			if ($language_selected->language->static_translation) {
+				$resultData['language_id_selected'] = $language_selected->language_id;
+				$existing = false;
+				foreach ($resultData['available_translations'] as $key => $value) {
+					if ($language_selected->language_id == $value['language_id']) {
+						$existing = true;
+					}
+				}
+	
+				if (!$existing) {
+					$resultData['language_id_selected'] = $english_language->id;
 				}
 			}
-
-			if (!$existing) {
+			else {
 				$resultData['language_id_selected'] = $english_language->id;
 			}
 		}
