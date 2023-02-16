@@ -14,7 +14,8 @@ use App\Http\Controllers\API\{
 	DynamicTranslationController,
 	BannersController,
 	ResourcesYearController,
-	ResourcesController
+	ResourcesController,
+	CampaignVotingConsentController
 };
 
 /*
@@ -135,6 +136,16 @@ Route::group(['prefix' => 'v1'], function () {
 				});
 			});
 		});
+
+		// consent
+		Route::group(['prefix' => 'consent'], function () {
+			Route::controller(CampaignVotingConsentController::class)->group(function () {
+				Route::middleware('auth.admin')->group( function () {
+					Route::get('list', 'index');
+					Route::get('stats', 'stats');
+				});
+			});
+		});
 	});
 
 	// Web routes
@@ -161,6 +172,14 @@ Route::group(['prefix' => 'v1'], function () {
 			Route::controller(ResourcesController::class)->group(function () {
 				Route::get('get-resources', 'getResources');
 				Route::get('download-resources-file/{id}', 'downloadResources');
+			});
+		});
+
+		// consent
+		Route::group(['prefix' => 'consent'], function () {
+			Route::controller(CampaignVotingConsentController::class)->group(function () {
+				Route::post('send-consent', 'sendConsent');
+				Route::get('stats', 'stats');
 			});
 		});
 
