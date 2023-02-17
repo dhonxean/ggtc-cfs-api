@@ -70,10 +70,18 @@ class CampaignVotingConsentController extends Controller
 			'type' => $request->type,
 		]);
 
-		$consent->load('country');
+		$total = 0;
+
+		$clicks = CampaignVotingConsent::where('type', 'click')
+		->count();
+
+		$redirects = CampaignVotingConsent::where('type', 'redirect')
+		->count();
+
+		$total = $clicks + $redirects;
 
 		return response([
-			'res' => $consent
+			'res' => $total
 		]);
 	}
 }
