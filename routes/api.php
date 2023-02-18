@@ -15,7 +15,7 @@ use App\Http\Controllers\API\{
 	BannersController,
 	ResourcesYearController,
 	ResourcesController,
-	CampaignVotingConsentController
+	TrackingController
 };
 
 /*
@@ -137,9 +137,9 @@ Route::group(['prefix' => 'v1'], function () {
 			});
 		});
 
-		// consent
-		Route::group(['prefix' => 'consent'], function () {
-			Route::controller(CampaignVotingConsentController::class)->group(function () {
+		// tracking
+		Route::group(['prefix' => 'tracking'], function () {
+			Route::controller(TrackingController::class)->group(function () {
 				Route::middleware('auth.admin')->group( function () {
 					Route::get('list', 'index');
 					Route::get('stats', 'stats');
@@ -175,10 +175,10 @@ Route::group(['prefix' => 'v1'], function () {
 			});
 		});
 
-		// consent
-		Route::group(['prefix' => 'consent'], function () {
-			Route::controller(CampaignVotingConsentController::class)->group(function () {
-				Route::post('send-consent', 'sendConsent');
+		// tracking
+		Route::group(['prefix' => 'tracking'], function () {
+			Route::controller(TrackingController::class)->group(function () {
+				Route::post('send-tracking', 'sendTracking');
 				Route::get('stats', 'stats');
 			});
 		});

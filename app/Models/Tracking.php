@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Traits\ModelTraits;
 
-class CampaignVotingConsent extends Model
+class Tracking extends Model
 {
     use HasFactory, SoftDeletes;
     
-    public $modelName = 'campaign_voting_consent';
-    public $table     = 'campaign_voting_consents';
+    public $modelName = 'tracking';
+    public $table     = 'trackings';
 
     protected $guarded = ['created_at'];
 
     public function country() {
-        return $this->hasOne(Country::class, 'iso2', 'country_code');
+        return $this->hasOne(WorldCountry::class, 'country_code', 'country_code');
     }
 }

@@ -494,6 +494,9 @@ class CountryController extends Controller
 			$resultData['language_id_selected'] = $english_language->id;
 		}
 
+		$resultData['all_countries'] = WorldCountry::orderBy('name')
+		->get();
+
 		return response([
 			'res' => $resultData
 		]);
