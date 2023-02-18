@@ -31,6 +31,12 @@ class CampaignVotingConsentController extends Controller
 		$record->redirects = CampaignVotingConsent::where('type', 'redirect')
 		->count();
 
+		$record->facebook = CampaignVotingConsent::where('type', 'facebook')
+		->count();
+
+		$record->twitter = CampaignVotingConsent::where('type', 'twitter')
+		->count();
+
 		return response([
 			'res' => $record
 		]);

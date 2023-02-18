@@ -17,7 +17,7 @@ class CreateCampaignVotingConsentsTable extends Migration
             $table->id();
             $table->string('campaign_name')->nullable();
             $table->string('country_code')->nullable();
-            $table->enum('type', ['click','redirect']);
+            $table->enum('type', ['click','redirect', 'facebook', 'twitter']);
             $table->timestamps();
             $table->softDeletes();
         });
