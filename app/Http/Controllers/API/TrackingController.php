@@ -69,7 +69,7 @@ class TrackingController extends Controller
 			], 400);
 		}
 
-		if ($request->type == 'sign-up') {
+		if ($request->type == 'sign-up' && (isset($request->email))) {
 			$checkConsent = Tracking::where([
 				'email' => $request->email,
 				'type' => 'sign-up'
