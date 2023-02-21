@@ -57,7 +57,7 @@ class TrackingController extends Controller
 	public function sendTracking(Request $request){
 		$validator = \Validator::make($request->all(), [
 			'campaign_name'    => 'required',
-			'country_code'    => 'sometimes',
+			'country_code'    => $request->type == 'sign-up' ? 'required' : 'sometimes',
 			'type'    => 'required',
 			'name' => $request->type == 'sign-up' ? 'required' : 'sometimes',
 			'email' => 'sometimes'
