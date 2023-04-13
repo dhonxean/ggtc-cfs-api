@@ -47,7 +47,11 @@ class TrackingController extends Controller
 			$q->select('id', 'name', 'country_code');
 		})
 		->orderByDesc('created_at')
-		->paginate(20);
+		->when( $request->filled('all') , function ($q, $request) {
+			return $q->get();
+		}, function ($q) {
+			return $q->paginate(20);
+		});
 
 		return response([
 			'res' => $consents
