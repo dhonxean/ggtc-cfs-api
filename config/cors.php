@@ -19,7 +19,9 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // 'allowed_origins' => ['*'],
+    'allowed_origins' => ['https://tobaccoplastics.ggtc.world'],
+
 
     'allowed_origins_patterns' => [],
 
