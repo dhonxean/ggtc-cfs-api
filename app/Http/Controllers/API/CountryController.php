@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use PDF;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Spatie\Browsershot\Browsershot;
+
 use App\Models\{
 	Country,
 	CountryDetail,
@@ -502,61 +504,99 @@ class CountryController extends Controller
 		]);
 	}
 
-	public function generate(Request $r) {
-		$countryCode = $r->countryCode;
+	// public function generate(Request $r) {
+	// 	$countryCode = $r->countryCode;
 
-		// generate pdf save to storage
-		$pdf = PDF::loadView('pdf', [
-			'pdfs' => $r->pdfs
-		])
-		->setPaper('a4', 'portrait')
-		->setOptions([
-			'isHtml5ParserEnabled' => true,
-			'dpi' => 150
-		]);
+	// 	// generate pdf save to storage
+	// 	$pdf = PDF::loadView('pdf', [
+	// 		'pdfs' => $r->pdfs
+	// 	])
+	// 	->setPaper('a4', 'portrait')
+	// 	->setOptions([
+	// 		'isHtml5ParserEnabled' => true,
+	// 		'dpi' => 150
+	// 	]);
 
-		$share_url = 'uploads/image-share';
-		$image_url = 'uploads/image-reports';
-		$pdf_url = 'uploads/pdf-reports';
+	// 	$share_url = 'uploads/image-share';
+	// 	$image_url = 'uploads/image-reports';
+	// 	$pdf_url = 'uploads/pdf-reports';
 
-		if ($r->languageCode) {
-			$share_url = "uploads/translations/image-share/$r->languageCode";
-			$image_url = "uploads/translations/image-reports/$r->languageCode";
-			$pdf_url = "uploads/translations/pdf-reports/$r->languageCode";
-		}
+	// 	if ($r->languageCode) {
+	// 		$share_url = "uploads/translations/image-share/$r->languageCode";
+	// 		$image_url = "uploads/translations/image-reports/$r->languageCode";
+	// 		$pdf_url = "uploads/translations/pdf-reports/$r->languageCode";
+	// 	}
 
-		$filename = "Customized Fact Sheet - $countryCode.pdf";
+	// 	$filename = "Customized Fact Sheet - $countryCode.pdf";
 
-		Storage::disk('public')->put("$pdf_url/$filename", $pdf->output());
+	// 	Storage::disk('public')->put("$pdf_url/$filename", $pdf->output());
 
-		$url = url('/') . "/storage/$pdf_url/$filename";
+	// 	$url = url('/') . "/storage/$pdf_url/$filename";
 
-		/* generate and save image to storage */
-		$image_64 = $r->image;
-		$extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
-		$replace = substr($image_64, 0, strpos($image_64, ',')+1);
-		$image = str_replace($replace, '', $image_64);
-		$image = str_replace(' ', '+', $image);
-		$imageName = "Customized_Fact_Sheet_-_$countryCode.$extension";
+	// 	/* generate and save image to storage */
+	// 	$image_64 = $r->image;
+	// 	$extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
+	// 	$replace = substr($image_64, 0, strpos($image_64, ',')+1);
+	// 	$image = str_replace($replace, '', $image_64);
+	// 	$image = str_replace(' ', '+', $image);
+	// 	$imageName = "Customized_Fact_Sheet_-_$countryCode.$extension";
 
-		Storage::disk('public')->put("$image_url/$imageName", base64_decode($image));
-		/* end */
+	// 	Storage::disk('public')->put("$image_url/$imageName", base64_decode($image));
+	// 	/* end */
 
-		// generate image for share module 
-		if ($r->social_share_downloadable) {
-			$share_image_64 = $r->social_share_downloadable;
-			$extension = explode('/', explode(':', substr($share_image_64, 0, strpos($share_image_64, ';')))[1])[1];
-			$replace = substr($share_image_64, 0, strpos($share_image_64, ',')+1);
-			$share_image = str_replace($replace, '', $share_image_64);
-			$share_image = str_replace(' ', '+', $share_image);
-			$share_imageName = "Customized_Fact_Sheet_-_$countryCode.$extension";
+	// 	// generate image for share module 
+	// 	if ($r->social_share_downloadable) {
+	// 		$share_image_64 = $r->social_share_downloadable;
+	// 		$extension = explode('/', explode(':', substr($share_image_64, 0, strpos($share_image_64, ';')))[1])[1];
+	// 		$replace = substr($share_image_64, 0, strpos($share_image_64, ',')+1);
+	// 		$share_image = str_replace($replace, '', $share_image_64);
+	// 		$share_image = str_replace(' ', '+', $share_image);
+	// 		$share_imageName = "Customized_Fact_Sheet_-_$countryCode.$extension";
 	
-			Storage::disk('public')->put("$share_url/$share_imageName", base64_decode($share_image));
+	// 		Storage::disk('public')->put("$share_url/$share_imageName", base64_decode($share_image));
+	// 	}
+
+
+	// 	return response([
+	// 		'download_url' => $url
+	// 	]);
+	// }
+	public function generate(Request $request) {
+		$countryCode = $request->input('countryCode');
+		$languageCode = $request->input('languageCode');
+	
+		$image_url = 'uploads/image-reports';
+		if ($languageCode) {
+			$image_url = "uploads/translations/image-reports/{$languageCode}";
 		}
-
-
-		return response([
-			'download_url' => $url
+	
+		// Ensure the directory exists
+		Storage::disk('public')->makeDirectory($image_url);
+	
+		$imageName = null;
+	
+		if ($request->has('image')) {
+			$imageName = "Customized_Fact_Sheet_-_{$countryCode}.png";
+			$this->saveBase64ToDisk($request->input('image'), "$image_url/$imageName");
+	
+			// ✅ Clear the request payload to free memory (prevent JIT error)
+			$request->replace($request->except('image'));
+		}
+	
+		return response()->json([
+			'status' => 'success',
+			'path' => $imageName ? "storage/{$image_url}/{$imageName}" : null
 		]);
 	}
+	
+	private function saveBase64ToDisk($base64, $path) {
+		// Extract and decode the base64 image
+		$img = explode(',', $base64)[1];
+		Storage::disk('public')->put($path, base64_decode($img));
+	
+		// ✅ Manually free memory
+		unset($base64, $img);
+	}
+	
+	
 }

@@ -15,22 +15,21 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths'                    => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods'          => ['*'],
 
     // 'allowed_origins' => ['*'],
-    'allowed_origins' => ['https://tobaccoplastics.ggtc.world', 'http://localhost:3022'],
-
+    'allowed_origins'          => ['https://cms-tobaccoplastics.ggtc.world', 'http://localhost:3022'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers'          => ['*'],
 
-    'exposed_headers' => [],
+    'exposed_headers'          => [],
 
-    'max_age' => 0,
+    'max_age'                  => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials'     => false,
 
 ];
