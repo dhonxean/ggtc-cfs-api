@@ -20,7 +20,7 @@ return [
     'allowed_methods'          => ['*'],
 
     // 'allowed_origins' => ['*'],
-    'allowed_origins'          => ['https://cms-tobaccoplastics.ggtc.world', 'http://localhost:3022'],
+    'allowed_origins'          => ['https://cms-tobaccoplastics.ggtc.world', 'http://localhost:3022', 'https://tobaccoplastics.ggtc.world'],
 
     'allowed_origins_patterns' => [],
 
