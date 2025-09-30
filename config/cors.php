@@ -15,12 +15,12 @@ return [
     |
     */
 
-    'paths'                    => ['api/*', 'v1/*' . 'sanctum/csrf-cookie'],
+    'paths'                    => ['api/*', 'v1/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods'          => ['*'],
 
     // 'allowed_origins' => ['*'],
-    'allowed_origins'          => ['https://tobaccoplastics.ggtc.world', 'http://localhost:3022', 'https://cms-tobaccoplastics.ggtc.world'],
+    'allowed_origins'          => ['https://tobaccoplastics.ggtc.world', 'http://localhost:3022'],
 
     'allowed_origins_patterns' => [],
 
